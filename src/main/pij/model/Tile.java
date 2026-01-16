@@ -34,9 +34,17 @@ public class Tile {
   public void setChosenLetter(Character chosenLetter) {
     if (!isWildcard) {
       throw new IllegalStateException("Cannot set chosen letter for a non-wildcard tile.");
-    } else if (isWildcard && chosenLetter != null) {
-      this.chosenLetter = chosenLetter;
     }
+    if (this.chosenLetter != null) {
+      throw new IllegalStateException("Chosen letter has already been set.");
+    }
+    if (chosenLetter == null) {
+      throw new IllegalArgumentException("Chosen letter cannot be null.");
+    }
+    if (chosenLetter < 'a' || chosenLetter > 'z') {
+      throw new IllegalArgumentException("Invalid letter: " + chosenLetter);
+    }
+    this.chosenLetter = chosenLetter;
   }
 
   @Override
