@@ -57,4 +57,8 @@ public class Board {
 
     this.startPosition = new Position(startColIndex, startRowIndex);
   }
+
+  public Position getStartPosition() {
+    return startPosition;
+  }
 }
