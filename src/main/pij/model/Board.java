@@ -12,7 +12,7 @@ public class Board {
   private final Square[][] squareGrid;
   private final Position startPosition;
 
-  public Board(int columns, int rows, String startPosition) {
+  public Board(int columns, int rows, Position startPosition) {
     if (columns < 7 || columns > 26) {
       throw new IllegalArgumentException("Invalid number of columns: " + columns +
           ". Must be between 7 and 26.");
@@ -31,31 +31,7 @@ public class Board {
     tileGrid = new Tile[rows][columns];
     squareGrid = new Square[rows][columns];
 
-    if (startPosition == null) {
-      throw new IllegalArgumentException("Start position cannot be null.");
-    }
-    if (startPosition.length() < 2) {
-      throw new IllegalArgumentException("Start position must be at least 2 characters long.");
-    }
-
-    char startColChar = startPosition.charAt(0);
-    int startColIndex = startColChar - 'a';
-
-    int startRowIndex;
-    try {
-      startRowIndex = Integer.parseInt(startPosition.substring(1)) - 1;
-    } catch (NumberFormatException e) {
-      throw new IllegalArgumentException("Invalid row format in start position: " + startPosition);
-    }
-
-    if (startColIndex < 0 || startColIndex >= columns) {
-      throw new IllegalArgumentException("Invalid start position column: " + startColChar);
-    }
-    if (startRowIndex < 0 || startRowIndex >= rows) {
-      throw new IllegalArgumentException("Invalid start position row: " + startRowIndex);
-    }
-
-    this.startPosition = new Position(startColIndex, startRowIndex);
+    this.startPosition = startPosition;
   }
 
   public Position getStartPosition() {
