@@ -50,8 +50,16 @@ public class Tile {
   @Override
   public String toString() {
     if (isWildcard && chosenLetter != null) {
-      return "[" + chosenLetter + value + "]";
+      return "" + chosenLetter + value;
     }
-    return "[" + letter + value + "]";
+    return "" + letter + value;
+  }
+
+  public String toBoardString() {
+    return String.format("%-3s", this);
+  }
+
+  public String toBracketedString() {
+    return "[" + this + "]";
   }
 }

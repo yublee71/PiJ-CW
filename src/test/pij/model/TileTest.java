@@ -14,13 +14,13 @@ public class TileTest {
   @Test
   void testTileCreation_Normal() {
     Tile tile = new Tile('A', 1);
-    assertEquals("[A1]", tile.toString());
+    assertEquals("A1", tile.toString());
   }
 
   @Test
   void testTileCreation_Wildcard() {
     Tile tile = new Tile('_', 8);
-    assertEquals("[_8]", tile.toString());
+    assertEquals("_8", tile.toString());
   }
 
   @Test
@@ -43,7 +43,7 @@ public class TileTest {
   void testSetChosenLetter_Wildcard() {
     Tile tile = new Tile('_', 8);
     tile.setChosenLetter('a');
-    assertEquals("[a8]", tile.toString());
+    assertEquals("a8", tile.toString());
   }
 
   @Test

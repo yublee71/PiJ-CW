@@ -60,9 +60,47 @@ public class Board {
   public void printSquareGrid() {
     for (int row = 0; row < rows; row++) {
       for (int col = 0; col < columns; col++) {
-        System.out.print(squareGrid[row][col]);
+        if (squareGrid[row][col] != null) {
+          System.out.print(squareGrid[row][col]);
+        }
       }
       System.out.println();
     }
+  }
+
+  public void printTileGrid() {
+    for (int row = 0; row < rows; row++) {
+      for (int col = 0; col < columns; col++) {
+        if (tileGrid[row][col] != null) {
+          System.out.print(tileGrid[row][col]);
+        }
+      }
+    }
+  }
+
+  public void print() {
+    printColumnIndex();
+    String formattedRow;
+    for (int row = 0; row < rows; row++) {
+      formattedRow = String.format("%2d", row + 1);
+      System.out.print(formattedRow + " ");
+      for (int col = 0; col < columns; col++) {
+        if (tileGrid[row][col] == null) {
+          System.out.print(squareGrid[row][col].toBoardString());
+        } else {
+          System.out.print(tileGrid[row][col].toBoardString());
+        }
+      }
+      System.out.println(" " + formattedRow);
+    }
+    printColumnIndex();
+  }
+
+  private void printColumnIndex() {
+    System.out.print("   ");
+    for (int col = 0; col < columns; col++) {
+      System.out.print(" " + (char) ('a' + col) + " ");
+    }
+    System.out.println();
   }
 }

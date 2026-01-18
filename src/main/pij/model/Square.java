@@ -24,14 +24,20 @@ public class Square {
 
   @Override
   public String toString() {
-    if (type == SquareType.STANDARD) {
-      return ".";
-    } else if (type == SquareType.LETTER_PREMIUM) {
-      return "[" + value + "]";
-    } else if (type == SquareType.WORD_PREMIUM) {
-      return "<" + value + ">";
-    } else {
-      return "";
-    }
+    return switch (type) {
+      case STANDARD -> ".";
+      case LETTER_PREMIUM -> "[" + value + "]";
+      case WORD_PREMIUM -> "<" + value + ">";
+    };
+
+  }
+
+  public String toBoardString() {
+    String formattedValue = String.format("%2d", value);
+    return switch (type) {
+      case STANDARD -> " . ";
+      case LETTER_PREMIUM -> formattedValue + ".";
+      case WORD_PREMIUM -> formattedValue + "!";
+    };
   }
 }
