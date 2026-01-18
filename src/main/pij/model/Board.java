@@ -34,8 +34,8 @@ public class Board {
     if (startPosition == null) {
       throw new IllegalArgumentException("Start position cannot be null.");
     }
-    if (startPosition.getCol() < 0 || startPosition.getCol() >= columns ||
-        startPosition.getRow() < 0 || startPosition.getRow() >= rows) {
+    if (startPosition.col() < 0 || startPosition.col() >= columns ||
+        startPosition.row() < 0 || startPosition.row() >= rows) {
       throw new IllegalArgumentException("Invalid start position: " + startPosition);
     }
 
