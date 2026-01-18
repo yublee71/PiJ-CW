@@ -1,6 +1,7 @@
 package pij.model;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -48,9 +49,17 @@ public class TileBag {
         tiles.add(new Tile(letter, info.value()));
       }
     });
+    Collections.shuffle(tiles);
   }
 
   public int size() {
     return tiles.size();
+  }
+
+  public Tile drawTile() {
+    if (tiles.isEmpty()) {
+      return null;
+    }
+    return tiles.removeLast();
   }
 }
