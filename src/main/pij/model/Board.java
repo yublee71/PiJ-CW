@@ -6,6 +6,11 @@ package pij.model;
  * @author Yubeen Lee
  */
 public class Board {
+  public static final int MIN_COLUMNS = 7;
+  public static final int MAX_COLUMNS = 26;
+  public static final int MIN_ROWS = 10;
+  public static final int MAX_ROWS = 99;
+  public static final int MIN_SIZE = 192;
   private final int columns;
   private final int rows;
   private final Tile[][] tileGrid;
@@ -13,17 +18,17 @@ public class Board {
   private final Position startPosition;
 
   public Board(int columns, int rows, Position startPosition) {
-    if (columns < 7 || columns > 26) {
+    if (columns < MIN_COLUMNS || columns > MAX_COLUMNS) {
       throw new IllegalArgumentException("Invalid number of columns: " + columns +
-          ". Must be between 7 and 26.");
+          ". Must be between " + MIN_COLUMNS + " and " + MAX_COLUMNS + ".");
     }
-    if (rows < 10 || rows > 99) {
+    if (rows < MIN_ROWS || rows > MAX_ROWS) {
       throw new IllegalArgumentException("Invalid number of rows: " + rows +
-          ". Must be between 10 and 99.");
+          ". Must be between " + MIN_ROWS + " and " + MAX_ROWS + ".");
     }
-    if (columns * rows < 192) {
+    if (columns * rows < MIN_SIZE) {
       throw new IllegalArgumentException("Board is too small: " + (columns * rows) +
-          " squares. Must have at least 192 squares.");
+          " squares. Must have at least " + MIN_SIZE + " squares.");
     }
 
     if (startPosition == null) {
