@@ -14,6 +14,7 @@ public class BoardLoaderTest {
   @Test
   void testLoadBoard_Default() {
     Board board = BoardLoader.loadBoard();
+    board.printSquareGrid();
   }
 
   @Test

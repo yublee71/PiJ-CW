@@ -2,6 +2,8 @@ package pij.util;
 
 import pij.model.Board;
 import pij.model.Position;
+import pij.model.Square;
+import pij.model.SquareType;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -21,7 +23,7 @@ public class BoardLoader {
 
     try {
       lines = Files.readAllLines(filePath);
-      lines.forEach(System.out::println);
+//      lines.forEach(System.out::println);
     } catch (IOException e) {
       throw new IllegalArgumentException("This is not a valid file: " + fileName);
     }
@@ -39,9 +41,20 @@ public class BoardLoader {
       throw new IllegalArgumentException("Invalid board configuration.");
     }
 
+    if (lines.size() != rows + 3) {
+      throw new IllegalArgumentException("Invalid board configuration. Rows do not match line count.");
+    }
+
     Position startPosition = getPosition(lines.get(2));
-    //TODO: fill in the board with squares
-    return new Board(columns, rows, startPosition);
+
+    Board board = new Board(columns, rows, startPosition);
+
+    for (int rowIndex = 0; rowIndex < rows; rowIndex++) {
+      String line = lines.get(rowIndex + 3);
+      parseLine(board, line, rowIndex, columns);
+    }
+
+    return board;
   }
 
   private static Position getPosition(String startPositionString) {
@@ -66,6 +79,51 @@ public class BoardLoader {
     }
 
     return new Position(startColChar - 'a', startRowIndex);
+  }
+
+  private static void parseLine(Board board, String line, int rowIndex, int columns) {
+    int colIndex = 0;
+    int i = 0;
+    while (i < line.length() && colIndex < columns) {
+      char c = line.charAt(i);
+      int end;
+      int value;
+
+      if (c == '.') {
+        board.setSquare(colIndex, rowIndex, new Square(1, SquareType.STANDARD));
+        i++;
+      } else if (c == '[') {
+        end = line.indexOf(']', i + 1);
+        if (end == -1) {
+          throw new IllegalArgumentException("Invalid board configuration: missing closing bracket ']'");
+        }
+        try {
+          value = Integer.parseInt(line.substring(i + 1, end));
+        } catch (NumberFormatException e) {
+          throw new IllegalArgumentException("Invalid board configuration: invalid square value.");
+        }
+        board.setSquare(colIndex, rowIndex, new Square(value, SquareType.LETTER_PREMIUM));
+        i = end + 1;
+      } else if (c == '<') {
+        end = line.indexOf('>', i + 1);
+        if (end == -1) {
+          throw new IllegalArgumentException("Invalid board configuration: missing closing bracket '>'");
+        }
+        try {
+          value = Integer.parseInt(line.substring(i + 1, end));
+        } catch (NumberFormatException e) {
+          throw new IllegalArgumentException("Invalid board configuration: invalid square value.");
+        }
+        board.setSquare(colIndex, rowIndex, new Square(value, SquareType.WORD_PREMIUM));
+        i = end + 1;
+      } else {
+        throw new IllegalArgumentException("Invalid board configuration: invalid square format.");
+      }
+      colIndex++;
+    }
+    if (i != line.length() || colIndex != columns) {
+      throw new IllegalArgumentException("Invalid board configuration: line length does not match column count.");
+    }
   }
 
   public static Board loadBoard() {

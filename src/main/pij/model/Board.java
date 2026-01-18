@@ -49,4 +49,20 @@ public class Board {
   public Position getStartPosition() {
     return startPosition;
   }
+
+  public void setSquare(int col, int row, Square square) {
+    if (col < 0 || col >= columns || row < 0 || row >= rows) {
+      throw new IllegalArgumentException("Square position out of bounds.");
+    }
+    squareGrid[row][col] = square;
+  }
+
+  public void printSquareGrid() {
+    for (int row = 0; row < rows; row++) {
+      for (int col = 0; col < columns; col++) {
+        System.out.print(squareGrid[row][col]);
+      }
+      System.out.println();
+    }
+  }
 }
