@@ -78,7 +78,7 @@ public class Board {
     }
   }
 
-  public void print() {
+  public void showBoard() {
     printColumnIndex();
     String formattedRow;
     for (int row = 0; row < rows; row++) {

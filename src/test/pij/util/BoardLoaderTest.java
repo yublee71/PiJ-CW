@@ -16,7 +16,7 @@ public class BoardLoaderTest {
     Board board = BoardLoader.loadBoard();
     board.printSquareGrid();
     board.printTileGrid();
-    board.print();
+    board.showBoard();
   }
 
   @Test
