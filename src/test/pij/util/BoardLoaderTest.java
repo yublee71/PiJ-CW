@@ -2,6 +2,7 @@ package pij.util;
 
 import org.junit.jupiter.api.Test;
 import pij.model.Board;
+import pij.model.Tile;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -16,6 +17,8 @@ public class BoardLoaderTest {
     Board board = BoardLoader.loadBoard();
     board.printSquareGrid();
     board.printTileGrid();
+    board.showBoard();
+    board.putTile(3, 5, new Tile('A', 1));
     board.showBoard();
   }
 

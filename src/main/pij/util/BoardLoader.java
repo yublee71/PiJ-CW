@@ -90,7 +90,7 @@ public class BoardLoader {
       int value;
 
       if (c == '.') {
-        board.setSquare(colIndex, rowIndex, new Square(1, SquareType.STANDARD));
+        board.putSquare(colIndex, rowIndex, new Square(1, SquareType.STANDARD));
         i++;
       } else if (c == '[') {
         end = line.indexOf(']', i + 1);
@@ -102,7 +102,7 @@ public class BoardLoader {
         } catch (NumberFormatException e) {
           throw new IllegalArgumentException("Invalid board configuration: invalid square value.");
         }
-        board.setSquare(colIndex, rowIndex, new Square(value, SquareType.LETTER_PREMIUM));
+        board.putSquare(colIndex, rowIndex, new Square(value, SquareType.LETTER_PREMIUM));
         i = end + 1;
       } else if (c == '<') {
         end = line.indexOf('>', i + 1);
@@ -114,7 +114,7 @@ public class BoardLoader {
         } catch (NumberFormatException e) {
           throw new IllegalArgumentException("Invalid board configuration: invalid square value.");
         }
-        board.setSquare(colIndex, rowIndex, new Square(value, SquareType.WORD_PREMIUM));
+        board.putSquare(colIndex, rowIndex, new Square(value, SquareType.WORD_PREMIUM));
         i = end + 1;
       } else {
         throw new IllegalArgumentException("Invalid board configuration: invalid square format.");

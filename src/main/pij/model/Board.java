@@ -50,11 +50,18 @@ public class Board {
     return startPosition;
   }
 
-  public void setSquare(int col, int row, Square square) {
+  public void putSquare(int col, int row, Square square) {
     if (col < 0 || col >= columns || row < 0 || row >= rows) {
       throw new IllegalArgumentException("Square position out of bounds.");
     }
     squareGrid[row][col] = square;
+  }
+
+  public void putTile(int col, int row, Tile tile) {
+    if (col < 0 || col >= columns || row < 0 || row >= rows) {
+      throw new IllegalArgumentException("Tile position out of bounds.");
+    }
+    tileGrid[row][col] = tile;
   }
 
   public void printSquareGrid() {
