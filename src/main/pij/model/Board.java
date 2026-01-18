@@ -25,12 +25,19 @@ public class Board {
       throw new IllegalArgumentException("Board is too small: " + (columns * rows) +
           " squares. Must have at least 192 squares.");
     }
+
+    if (startPosition == null) {
+      throw new IllegalArgumentException("Start position cannot be null.");
+    }
+    if (startPosition.getCol() < 0 || startPosition.getCol() >= columns ||
+        startPosition.getRow() < 0 || startPosition.getRow() >= rows) {
+      throw new IllegalArgumentException("Invalid start position: " + startPosition);
+    }
+
     this.columns = columns;
     this.rows = rows;
-
-    tileGrid = new Tile[rows][columns];
-    squareGrid = new Square[rows][columns];
-
+    this.tileGrid = new Tile[rows][columns];
+    this.squareGrid = new Square[rows][columns];
     this.startPosition = startPosition;
   }
 

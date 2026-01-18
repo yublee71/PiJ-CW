@@ -39,18 +39,20 @@ public class BoardLoader {
       throw new IllegalArgumentException("Invalid board configuration.");
     }
 
-    Position startPosition = getPosition(lines.get(2), columns, rows);
-
+    Position startPosition = getPosition(lines.get(2));
+    //TODO: fill in the board with squares
     return new Board(columns, rows, startPosition);
   }
 
-  private static Position getPosition(String startPositionString, int columns, int rows) {
+  private static Position getPosition(String startPositionString) {
     if (startPositionString.length() < 2) {
       throw new IllegalArgumentException("Start position must be at least 2 characters long.");
     }
 
     char startColChar = startPositionString.charAt(0);
-    int startColIndex = startColChar - 'a';
+    if (startColChar < 'a' || startColChar > 'z') {
+      throw new IllegalArgumentException("Invalid column format in start position: " + startPositionString);
+    }
 
     int startRowIndex;
     try {
@@ -59,14 +61,11 @@ public class BoardLoader {
       throw new IllegalArgumentException("Invalid row format in start position: " + startPositionString);
     }
 
-    if (startColIndex < 0 || startColIndex >= columns) {
-      throw new IllegalArgumentException("Invalid start position column: " + startColChar);
-    }
-    if (startRowIndex < 0 || startRowIndex >= rows) {
-      throw new IllegalArgumentException("Invalid start position row: " + startRowIndex);
+    if (startRowIndex < 0) {
+      throw new IllegalArgumentException("Invalid row format in start position: " + startPositionString);
     }
 
-    return new Position(startColIndex, startRowIndex);
+    return new Position(startColChar - 'a', startRowIndex);
   }
 
   public static Board loadBoard() {

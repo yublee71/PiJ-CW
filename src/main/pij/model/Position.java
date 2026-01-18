@@ -21,4 +21,9 @@ public class Position {
   public int getRow() {
     return row;
   }
+
+  @Override
+  public String toString() {
+    return "" + (char) (col + 'a') + (row + 1);
+  }
 }

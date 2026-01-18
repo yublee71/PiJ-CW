@@ -38,4 +38,5 @@ public class BoardLoaderTest {
         });
     System.out.println(exception.getMessage());
   }
+  //TODO: Add tests for invalid board configurations - col,row,startPosition
 }
