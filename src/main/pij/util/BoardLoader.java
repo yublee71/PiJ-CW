@@ -17,8 +17,12 @@ import java.util.List;
  * @author Yubeen Lee
  */
 public class BoardLoader {
+  //TODO: clean up exception logic
+  private static final String DEFAULT_BOARD_FILENAME = "DefaultBoard.txt";
+  private static final String RESOURCE_FOLDER_NAME = "resources";
+
   public static Board loadBoard(String fileName) {
-    Path filePath = Paths.get("resources", fileName);
+    Path filePath = Paths.get(RESOURCE_FOLDER_NAME, fileName);
     List<String> lines;
 
     try {
@@ -127,6 +131,6 @@ public class BoardLoader {
   }
 
   public static Board loadBoard() {
-    return loadBoard("defaultBoard.txt");
+    return loadBoard(DEFAULT_BOARD_FILENAME);
   }
 }
