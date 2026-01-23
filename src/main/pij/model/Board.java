@@ -31,23 +31,29 @@ public class Board {
           " squares. Must have at least " + MIN_SIZE + " squares.");
     }
 
-    if (startPosition == null) {
-      throw new IllegalArgumentException("Start position cannot be null.");
-    }
-    if (startPosition.col() < 0 || startPosition.col() >= columns ||
-        startPosition.row() < 0 || startPosition.row() >= rows) {
-      throw new IllegalArgumentException("Invalid start position: " + startPosition);
-    }
-
     this.columns = columns;
     this.rows = rows;
     this.tileGrid = new Tile[rows][columns];
     this.squareGrid = new Square[rows][columns];
+
+    if (startPosition == null) {
+      throw new IllegalArgumentException("Start position cannot be null.");
+    }
+
+    if (!isPositionInBoard(startPosition)) {
+      throw new IllegalArgumentException("Invalid start position: " + startPosition);
+    }
+
     this.startPosition = startPosition;
   }
 
   public Position getStartPosition() {
     return startPosition;
+  }
+
+  public boolean isPositionInBoard(Position position) {
+    return !(position.col() < 0 || position.col() >= columns ||
+        position.row() < 0 || position.row() >= rows);
   }
 
   public void putSquare(int col, int row, Square square) {

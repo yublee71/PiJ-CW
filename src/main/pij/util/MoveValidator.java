@@ -1,6 +1,7 @@
 package pij.util;
 
 import pij.model.Board;
+import pij.model.DirectedPosition;
 import pij.model.Move;
 import pij.model.Player;
 
@@ -22,18 +23,23 @@ public class MoveValidator {
 
     //if first part or second part is invalid return null
     String letters;
-    String startPositionString;
+    String movePositionString;
 
     letters = moveString.substring(0, commaIndex);
-    startPositionString = moveString.substring(commaIndex + 1);
+    movePositionString = moveString.substring(commaIndex + 1);
 
-    if (letters.isEmpty() || startPositionString.isEmpty()) {
+    if (letters.isEmpty() || movePositionString.isEmpty()) {
       return null;
     }
 
     //TODO: letter validation with player rack
-    //TODO: startPosition validation
 
-    return new Move(null, null);
+
+    DirectedPosition directedPosition = DirectedPosition.stringToDirectedPosition(movePositionString);
+    if (directedPosition == null || !board.isPositionInBoard(directedPosition.getStartPosition())) {
+      return null;
+    }
+
+    return new Move(null, directedPosition);
   }
 }
