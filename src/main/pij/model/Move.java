@@ -7,17 +7,17 @@ package pij.model;
  */
 public class Move {
   private final String letters;
-  private final Position startPosition;
+  private final DirectedPosition directedPosition;
 
-  public Move(String letters, Position startPosition) {
+  public Move(String letters, DirectedPosition directedPosition) {
     this.letters = letters;
-    this.startPosition = startPosition;
+    this.directedPosition = directedPosition;
   }
 
   @Override
   public String toString() {
-    if (letters == null || startPosition == null)
+    if (letters == null || directedPosition == null)
       return ",";
-    return letters + ',' + startPosition;
+    return letters + ',' + directedPosition;
   }
 }
