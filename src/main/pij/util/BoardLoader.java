@@ -49,7 +49,10 @@ public class BoardLoader {
       throw new IllegalArgumentException("Invalid board configuration. Rows do not match line count.");
     }
 
-    Position startPosition = getPosition(lines.get(2));
+    Position startPosition = Position.stringToPosition(lines.get(2));
+    if (startPosition == null) {
+      throw new IllegalArgumentException("Invalid board configuration. Start position is invalid.");
+    }
 
     Board board = new Board(columns, rows, startPosition);
 
@@ -59,30 +62,6 @@ public class BoardLoader {
     }
 
     return board;
-  }
-
-  private static Position getPosition(String startPositionString) {
-    if (startPositionString.length() < 2) {
-      throw new IllegalArgumentException("Start position must be at least 2 characters long.");
-    }
-
-    char startColChar = startPositionString.charAt(0);
-    if (startColChar < 'a' || startColChar > 'z') {
-      throw new IllegalArgumentException("Invalid column format in start position: " + startPositionString);
-    }
-
-    int startRowIndex;
-    try {
-      startRowIndex = Integer.parseInt(startPositionString.substring(1)) - 1;
-    } catch (NumberFormatException e) {
-      throw new IllegalArgumentException("Invalid row format in start position: " + startPositionString);
-    }
-
-    if (startRowIndex < 0) {
-      throw new IllegalArgumentException("Invalid row format in start position: " + startPositionString);
-    }
-
-    return new Position(startColChar - 'a', startRowIndex);
   }
 
   private static void parseLine(Board board, String line, int rowIndex, int columns) {
