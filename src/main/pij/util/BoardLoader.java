@@ -18,7 +18,7 @@ import java.util.List;
  */
 public class BoardLoader {
   //TODO: clean up exception logic
-  private static final String DEFAULT_BOARD_FILENAME = "DefaultBoard.txt";
+  private static final String DEFAULT_BOARD_FILENAME = "defaultBoard.txt";
   private static final String RESOURCE_FOLDER_NAME = "resources";
 
   public static Board loadBoard(String fileName) {
