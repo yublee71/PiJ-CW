@@ -1,6 +1,9 @@
 package pij.util;
 
 import org.junit.jupiter.api.Test;
+import pij.model.Board;
+import pij.model.DirectedPosition;
+import pij.model.Move;
 import pij.model.Tile;
 
 import java.util.ArrayList;
@@ -98,5 +101,33 @@ public class MoveValidaterTest {
   void testIsLettersInRack_invalid_emptyRack() {
     List<Tile> rack = new ArrayList<>();
     assertFalse(MoveValidator.isLettersInRack(rack, "A"));
+  }
+
+  @Test
+  void testIsPlacementValid_valid_vertical() {
+    Move move = new Move("A", DirectedPosition.stringToDirectedPosition("o14"));
+    Board board = BoardLoader.loadBoard();
+    assertTrue(MoveValidator.isPlacementValid(move, board));
+  }
+
+  @Test
+  void testIsPlacementValid_valid_horizontal() {
+    Move move = new Move("AB", DirectedPosition.stringToDirectedPosition("14o"));
+    Board board = BoardLoader.loadBoard();
+    assertTrue(MoveValidator.isPlacementValid(move, board));
+  }
+
+  @Test
+  void testIsPlacementValid_invalid_outOfRow() {
+    Move move = new Move("AB", DirectedPosition.stringToDirectedPosition("o14"));
+    Board board = BoardLoader.loadBoard();
+    assertFalse(MoveValidator.isPlacementValid(move, board));
+  }
+
+  @Test
+  void testIsPlacementValid_invalid_outOfCol() {
+    Move move = new Move("ABC", DirectedPosition.stringToDirectedPosition("14o"));
+    Board board = BoardLoader.loadBoard();
+    assertFalse(MoveValidator.isPlacementValid(move, board));
   }
 }
