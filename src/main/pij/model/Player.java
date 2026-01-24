@@ -15,10 +15,13 @@ public class Player {
   private boolean isHuman;
 
   public Player(boolean isHuman, TileBag tileBag) {
+    //TODO: tileBag null check
     score = 0;
     for (int i = 0; i < MAX_RACK_SIZE; i++) {
+      //TODO: check if it is possible to add
       rack.add(tileBag.drawTile());
     }
+    this.isHuman = true; //TODO: reflect argument value
   }
 
   public int getScore() {
