@@ -8,6 +8,7 @@ package pij.model;
 public class DirectedPosition {
   Position startPosition;
   Direction direction;
+  String originalString;
 
   public static DirectedPosition stringToDirectedPosition(String s) {
     Position startPosition = null;
@@ -34,12 +35,13 @@ public class DirectedPosition {
     if (startPosition == null)
       return null;
     else
-      return new DirectedPosition(startPosition, direction);
+      return new DirectedPosition(startPosition, direction, s);
   }
 
-  public DirectedPosition(Position startPosition, Direction direction) {
+  public DirectedPosition(Position startPosition, Direction direction, String s) {
     this.startPosition = startPosition;
     this.direction = direction;
+    this.originalString = s;
   }
 
   public Position getStartPosition() {
@@ -48,6 +50,6 @@ public class DirectedPosition {
 
   @Override
   public String toString() {
-    return super.toString();
+    return originalString;
   }
 }
