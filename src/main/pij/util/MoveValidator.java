@@ -7,6 +7,7 @@ import pij.model.Tile;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  *
@@ -23,8 +24,17 @@ public class MoveValidator {
   }
 
   public static boolean isLettersInRack(List<Tile> rack, String letters) {
-    List<Tile> rackCopy = new ArrayList<>(rack);
+    Objects.requireNonNull(rack, "Player rack cannot be null");
+    Objects.requireNonNull(letters, "Letters cannot be null");
 
+    if (letters.isEmpty()) {
+      return true;
+    }
+    if (rack.isEmpty()) {
+      return false;
+    }
+
+    List<Tile> rackCopy = new ArrayList<>(rack);
     for (char c : letters.toCharArray()) {
       boolean found = false;
       for (int i = 0; i < rackCopy.size(); i++) {
