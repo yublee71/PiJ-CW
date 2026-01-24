@@ -28,6 +28,11 @@ public class MoveValidator {
     letters = moveString.substring(0, commaIndex);
     movePositionString = moveString.substring(commaIndex + 1);
 
+    //if both empty, the move is pass
+    if (letters.isEmpty() && movePositionString.isEmpty()) {
+      return new Move(null, null);
+    }
+
     if (letters.isEmpty() || movePositionString.isEmpty()) {
       return null;
     }
@@ -40,6 +45,6 @@ public class MoveValidator {
       return null;
     }
 
-    return new Move(null, directedPosition);
+    return new Move(letters, directedPosition);
   }
 }

@@ -17,7 +17,7 @@ public class Move {
   @Override
   public String toString() {
     if (letters == null || directedPosition == null)
-      return ",";
-    return letters + ',' + directedPosition;
+      return "Pass Move!";
+    return "Letters: " + letters + " at position " + directedPosition;
   }
 }
