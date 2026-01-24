@@ -1,9 +1,6 @@
 package pij.util;
 
-import pij.model.Board;
-import pij.model.Move;
-import pij.model.Player;
-import pij.model.Tile;
+import pij.model.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -53,7 +50,35 @@ public class MoveValidator {
   }
 
   public static boolean isPlacementValid(Move move, Board board) {
-    //TODO: placement validation (within board, no tile put already)
+    Objects.requireNonNull(move, "Move cannot be null");
+    Objects.requireNonNull(board, "Board cannot be null");
+
+    Direction moveDirection = move.getDirectedPosition().getDirection();
+    Position moveStartPosition = move.getDirectedPosition().getStartPosition();
+    int lettersLength = move.getLetters().length();
+    Tile[][] tileGrid = board.getTileGrid();
+
+    if (moveDirection == Direction.HORIZONTAL) {
+      if (moveStartPosition.col() + lettersLength > board.getColumns()) {
+        return false;
+      }
+      for (int i = 0; i < lettersLength; i++) {
+        if (tileGrid[moveStartPosition.row()][i] != null)
+          return false;
+        //TODO: test
+      }
+    }
+
+    if (moveDirection == Direction.VERTICAL) {
+      if (moveStartPosition.row() + lettersLength > board.getRows()) {
+        return false;
+      }
+      for (int i = 0; i < lettersLength; i++) {
+        if (tileGrid[i][moveStartPosition.col()] != null)
+          return false;
+        //TODO: test
+      }
+    }
     return true;
   }
 

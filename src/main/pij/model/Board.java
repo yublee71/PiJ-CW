@@ -130,4 +130,16 @@ public class Board {
   public void showStartPosition() {
     System.out.println("Start position: " + startPosition);
   }
+
+  public int getColumns() {
+    return columns;
+  }
+
+  public int getRows() {
+    return rows;
+  }
+
+  public Tile[][] getTileGrid() {
+    return tileGrid;
+  }
 }

@@ -25,4 +25,7 @@ public class Move {
     return letters;
   }
 
+  public DirectedPosition getDirectedPosition() {
+    return directedPosition;
+  }
 }
