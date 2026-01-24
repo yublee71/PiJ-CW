@@ -95,7 +95,8 @@ public class Game {
         are wildcards.
         Entering "," passes the turn.
         """;
-    while (!isGameOver) {
+    while (!isGameOver) {//TODO: check tile bag, pass twice
+      //TODO: different display for computer player
       board.showBoard();
       board.showStartPosition();
       if (isOpenGame) {
@@ -124,6 +125,7 @@ public class Game {
           if (!isMoveValid) {
             System.out.println("Cannot make this move. Please try again.");
           } else {
+            //TODO: make move
             currentPlayer = 1 - currentPlayer;
           }
         }
