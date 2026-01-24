@@ -3,21 +3,20 @@ package pij.util;
 import pij.model.Board;
 import pij.model.DirectedPosition;
 import pij.model.Move;
-import pij.model.Player;
 
 /**
  *
  *
  * @author Yubeen Lee
  */
-public class MoveValidator {
-  public static Move moveValidate(Board board, Player player, String moveString) {
+public class MoveParser {
+  public static Move parse(Board board, String moveString) {
     if (moveString == null || moveString.isEmpty())
       return null;
 
     //if no comma found return null
     int commaIndex;
-    commaIndex = moveString.indexOf(',', 0);
+    commaIndex = moveString.indexOf(',');
     if (commaIndex == -1)
       return null;
 
@@ -37,7 +36,7 @@ public class MoveValidator {
       return null;
     }
 
-    //TODO: letter validation with player rack
+    //TODO: letter validation with player rack and board
 
 
     DirectedPosition directedPosition = DirectedPosition.stringToDirectedPosition(movePositionString);

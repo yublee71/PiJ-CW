@@ -5,7 +5,7 @@ import pij.model.Move;
 import pij.model.Player;
 import pij.model.TileBag;
 import pij.util.BoardLoader;
-import pij.util.MoveValidator;
+import pij.util.MoveParser;
 
 import java.util.Scanner;
 
@@ -112,13 +112,12 @@ public class Game {
       while (move == null) {
         System.out.print(moveExplanation);
         moveString = scan.nextLine();
-        move = MoveValidator.moveValidate(board, players[currentPlayer], moveString);
+        move = MoveParser.parse(board, moveString);
         if (move == null) {
           System.out.println("Illegal move format");
         } else {
           System.out.print("The move is:    ");
           System.out.println(move);
-//          printMove();
         }
       }
     }
