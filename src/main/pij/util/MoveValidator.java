@@ -16,8 +16,6 @@ public class MoveValidator {
     return isLettersInRack(player.getRack(), move.getLetters()) &&
         isPlacementValid(move, board) &&
         isWordValid(move, board);
-//    System.out.println("Player 1 score: " + players[0].getScore());
-//    System.out.println("Player 2 score: " + players[1].getScore());
   }
 
   public static boolean isLettersInRack(List<Tile> rack, String letters) {
@@ -55,31 +53,39 @@ public class MoveValidator {
 
     Direction moveDirection = move.getDirectedPosition().getDirection();
     Position moveStartPosition = move.getDirectedPosition().getStartPosition();
+    String letters = move.getLetters();
     int lettersLength = move.getLetters().length();
     Tile[][] tileGrid = board.getTileGrid();
 
+    StringBuilder word = new StringBuilder();
+    int col = moveStartPosition.col();
+    int row = moveStartPosition.row();
+    int i = 0;
     if (moveDirection == Direction.HORIZONTAL) {
-      if (moveStartPosition.col() + lettersLength > board.getColumns()) {
-        return false;
+      while (i < lettersLength && col < board.getColumns()) {
+        if (tileGrid[row][col] == null) {
+          word.append(letters.charAt(i));
+          i++;
+        } else {
+          word.append(tileGrid[row][col].getLetter());
+        }
+        col++;
       }
-      for (int i = 0; i < lettersLength; i++) {
-        if (tileGrid[moveStartPosition.row()][i] != null)
-          return false;
-        //TODO: test
+    } else if (moveDirection == Direction.VERTICAL) {
+      while (i < lettersLength && row < board.getRows()) {
+        if (tileGrid[row][col] == null) {
+          word.append(letters.charAt(i));
+          i++;
+        } else {
+          word.append(tileGrid[row][col].getLetter());
+        }
+        row++;
       }
+      //TODO: test
     }
-
-    if (moveDirection == Direction.VERTICAL) {
-      if (moveStartPosition.row() + lettersLength > board.getRows()) {
-        return false;
-      }
-      for (int i = 0; i < lettersLength; i++) {
-        if (tileGrid[i][moveStartPosition.col()] != null)
-          return false;
-        //TODO: test
-      }
-    }
-    return true;
+    //TODO: word validation
+//    System.out.println(word);
+    return i == lettersLength;
   }
 
   public static boolean isWordValid(Move move, Board board) {
