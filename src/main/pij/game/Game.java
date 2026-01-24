@@ -6,6 +6,7 @@ import pij.model.Player;
 import pij.model.TileBag;
 import pij.util.BoardLoader;
 import pij.util.MoveParser;
+import pij.util.MoveValidator;
 
 import java.util.Scanner;
 
@@ -109,7 +110,8 @@ public class Game {
 
       String moveString;
       Move move = null;
-      while (move == null) {
+      boolean isMoveValid = false;
+      while (move == null || !isMoveValid) {
         System.out.print(moveExplanation);
         moveString = scan.nextLine();
         move = MoveParser.parse(board, moveString);
@@ -118,6 +120,12 @@ public class Game {
         } else {
           System.out.print("The move is:    ");
           System.out.println(move);
+          isMoveValid = MoveValidator.isMoveValid(move, players[currentPlayer], board);
+          if (!isMoveValid) {
+            System.out.println("Cannot make this move. Please try again.");
+          } else {
+            currentPlayer = 1 - currentPlayer;
+          }
         }
       }
     }
