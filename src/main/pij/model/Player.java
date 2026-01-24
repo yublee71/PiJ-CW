@@ -41,4 +41,8 @@ public class Player {
     }
     System.out.println();
   }
+
+  public List<Tile> getRack() {
+    return rack;
+  }
 }

@@ -20,4 +20,9 @@ public class Move {
       return "Pass Move!";
     return "Letters: " + letters + " at position " + directedPosition;
   }
+
+  public String getLetters() {
+    return letters;
+  }
+
 }

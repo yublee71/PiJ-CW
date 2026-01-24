@@ -62,4 +62,8 @@ public class Tile {
   public String toBracketedString() {
     return "[" + this + "]";
   }
+
+  public char getLetter() {
+    return letter;
+  }
 }
