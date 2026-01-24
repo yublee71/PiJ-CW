@@ -1,9 +1,11 @@
 package pij.game;
 
 import pij.model.Board;
+import pij.model.Move;
 import pij.model.Player;
 import pij.model.TileBag;
 import pij.util.BoardLoader;
+import pij.util.MoveValidator;
 
 import java.util.Scanner;
 
@@ -34,6 +36,9 @@ public class Game {
   private static final String PROMPT_BOARD_FILE =
       "Please enter the file name of the board: ";
 
+  private static final String PLAYER1_NAME = "Player 1";
+  private static final String PLAYER2_NAME = "Player 2";
+
 
   private final Board board;
   private final TileBag tileBag;
@@ -51,7 +56,7 @@ public class Game {
       try {
         tmpBoard = BoardLoader.loadBoard();
       } catch (IllegalArgumentException e) {
-        throw new IllegalArgumentException(ERR_INVALID_DEFAULT_BOARD);
+        throw new IllegalArgumentException(ERR_INVALID_DEFAULT_BOARD, e);
       }
     } else {
       boolean isBoardLoaded = false;
@@ -76,6 +81,59 @@ public class Game {
     this.currentPlayer = 0;
     this.isOpenGame = promptToSelectOption(OPTION_OPEN_CLOSE, 'o', 'c') == 'o';
     this.isGameOver = false;
+  }
+
+  public void run() {
+    Scanner scan = new Scanner(System.in);
+    String moveExplanation = """
+        Please enter your move in the format: "word,square" (without the quotes)
+        For example, for suitable tile rack and board configuration, a downward move
+        could be "HI,f4" and a rightward move could be "HI,4f".
+        
+        In the word, upper-case letters are standard tiles and lower-case letters
+        are wildcards.
+        Entering "," passes the turn.
+        """;
+    while (!isGameOver) {
+      board.showBoard();
+      board.showStartPosition();
+      if (isOpenGame) {
+        System.out.println("OPEN GAME: " + otherPlayerName(currentPlayer) + "'s tiles:");
+        System.out.print("OPEN GAME: ");
+        players[otherPlayerIndex(currentPlayer)].showRack();
+      }
+      System.out.println("It's your turn, " + currentPlayerName(currentPlayer) + "! Your tiles:");
+      players[currentPlayer].showRack();
+
+      //TODO: implement move
+
+      String moveString;
+      Move move = null;
+      while (move == null) {
+        System.out.print(moveExplanation);
+        moveString = scan.nextLine();
+        move = MoveValidator.moveValidate(board, players[currentPlayer], moveString);
+        if (move == null) {
+          System.out.println("Illegal move format");
+        } else {
+          System.out.print("The move is:    ");
+          System.out.println(move);
+//          printMove();
+        }
+      }
+    }
+  }
+
+  private String currentPlayerName(int playerIndex) {
+    return (playerIndex == 0 ? PLAYER1_NAME : PLAYER2_NAME);
+  }
+
+  private String otherPlayerName(int playerIndex) {
+    return (playerIndex == 0 ? PLAYER2_NAME : PLAYER1_NAME);
+  }
+
+  private int otherPlayerIndex(int currentPlayer) {
+    return 1 - currentPlayer;
   }
 
   private static char promptToSelectOption(String optionMessage, char option1, char option2) {

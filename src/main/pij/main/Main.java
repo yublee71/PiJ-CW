@@ -1,5 +1,10 @@
 package pij.main;
 
-public class Main {
+import pij.game.Game;
 
+public class Main {
+  public static void main() {
+    Game game = new Game();
+    game.run();
+  }
 }

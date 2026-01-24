@@ -17,6 +17,14 @@ public class Board {
   private final Square[][] squareGrid;
   private final Position startPosition;
 
+  /**
+   *
+   * @param columns
+   * @param rows
+   * @param startPosition
+   * @throws IllegalArgumentException if {@code columns} or {@code rows} is out of bounds
+   *                                  or if {@code startPosition) is invalid
+   */
   public Board(int columns, int rows, Position startPosition) {
     if (columns < MIN_COLUMNS || columns > MAX_COLUMNS) {
       throw new IllegalArgumentException("Invalid number of columns: " + columns +
@@ -92,6 +100,8 @@ public class Board {
   }
 
   public void showBoard() {
+    System.out.println();
+    System.out.println();
     printColumnIndex();
     String formattedRow;
     for (int row = 0; row < rows; row++) {
@@ -115,5 +125,9 @@ public class Board {
       System.out.print(" " + (char) ('a' + col) + " ");
     }
     System.out.println();
+  }
+
+  public void showStartPosition() {
+    System.out.println("Start position: " + startPosition);
   }
 }
