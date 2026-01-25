@@ -8,10 +8,12 @@ package pij.model;
 public class Move {
   private final String letters;
   private final DirectedPosition directedPosition;
+  private boolean isFirstMove;
 
   public Move(String letters, DirectedPosition directedPosition) {
     this.letters = letters;
     this.directedPosition = directedPosition;
+    this.isFirstMove = false;
   }
 
   @Override
@@ -27,5 +29,13 @@ public class Move {
 
   public DirectedPosition getDirectedPosition() {
     return directedPosition;
+  }
+
+  public void setIsFirstMove(boolean isFirstMove) {
+    this.isFirstMove = isFirstMove;
+  }
+
+  public boolean isFirstMove() {
+    return isFirstMove;
   }
 }

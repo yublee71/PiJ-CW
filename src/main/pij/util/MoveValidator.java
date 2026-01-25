@@ -4,6 +4,7 @@ import pij.model.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Objects;
 
 /**
@@ -17,8 +18,7 @@ public class MoveValidator {
     if (move.getLetters() == null && move.getDirectedPosition() == null)
       return true;
     return isLettersInRack(player.getRack(), move.getLetters()) &&
-        isPlacementValid(move, board) &&
-        isWordValid(move, board);
+        isPlacementValid(move, board);
   }
 
   public static boolean isLettersInRack(List<Tile> rack, String letters) {
@@ -63,35 +63,74 @@ public class MoveValidator {
     StringBuilder word = new StringBuilder();
     int col = moveStartPosition.col();
     int row = moveStartPosition.row();
-    int i = 0;
-    if (moveDirection == Direction.HORIZONTAL) {
-      while (i < lettersLength && col < board.getColumns()) {
-        if (tileGrid[row][col] == null) {
-          word.append(letters.charAt(i));
-          i++;
-        } else {
-          word.append(tileGrid[row][col].getLetter());
-        }
-        col++;
+    //if start position is occupied return false
+    if (tileGrid[row][col] != null)
+      return false;
+    //TODO: check start position for the first move
+    //TODO: check the other direction
+    boolean tileExists = false;
+
+    Tile currentTile;
+    int i = 1;
+    while ((moveDirection == Direction.HORIZONTAL && col - i < board.getColumns()) && col - i >= 0 ||
+        (moveDirection == Direction.VERTICAL && row - i < board.getRows() && row - i >= 0)) {
+      if (moveDirection == Direction.HORIZONTAL)
+        currentTile = tileGrid[row][col - i];
+      else {
+        currentTile = tileGrid[row - i][col];
       }
-    } else if (moveDirection == Direction.VERTICAL) {
-      while (i < lettersLength && row < board.getRows()) {
-        if (tileGrid[row][col] == null) {
-          word.append(letters.charAt(i));
-          i++;
-        } else {
-          word.append(tileGrid[row][col].getLetter());
-        }
+      if (currentTile != null) {
+        tileExists = true;
+        word.append(currentTile.getLetter());
+      } else {
+        break;
+      }
+      i++;
+    }
+
+
+    int j = 0;
+    while (j < lettersLength && col < board.getColumns() && row < board.getRows()) {
+      if (tileGrid[row][col] == null) {
+        word.append(letters.charAt(j));
+        j++;
+      } else {
+        tileExists = true;
+        word.append(tileGrid[row][col].getLetter());
+      }
+      if (moveDirection == Direction.HORIZONTAL) {
+        col++;
+      } else if (moveDirection == Direction.VERTICAL) {
         row++;
       }
-      //TODO: test
     }
+
+    int k = 1;
+    while ((moveDirection == Direction.HORIZONTAL && col + k < board.getColumns()) && col + k >= 0 ||
+        (moveDirection == Direction.VERTICAL && row + k < board.getRows() && row + k >= 0)) {
+      if (moveDirection == Direction.HORIZONTAL)
+        currentTile = tileGrid[row][col + k];
+      else {
+        currentTile = tileGrid[row + k][col];
+      }
+      if (currentTile != null) {
+        tileExists = true;
+        word.append(currentTile.getLetter());
+      } else {
+        break;
+      }
+      k++;
+    }
+
+
+    String finalWord = word.toString().toLowerCase(Locale.ROOT);
+    //TODO: test
     //TODO: word validation
-//    System.out.println(word);
-    return i == lettersLength;
+    System.out.println(finalWord);
+    return j == lettersLength && (tileExists || move.isFirstMove() && isWordValid(finalWord));
   }
 
-  public static boolean isWordValid(Move move, Board board) {
+  public static boolean isWordValid(String word) {
     //TODO: word validation
     return true;
   }
