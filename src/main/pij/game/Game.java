@@ -59,9 +59,9 @@ public class Game {
   private final TileBag tileBag;
   private final Player[] players;
   private int currentPlayer;
-  private boolean isGameOver;
   private final boolean isOpenGame;
   private final List<String> words;
+  private int numOfConsecutivePass;
 
   public Game() {
     System.out.println(GAME_BANNER);
@@ -107,7 +107,7 @@ public class Game {
     this.players[1] = new Player(promptToSelectOption(OPTION_PLAYER2, 'h', 'c') == 'h', tileBag);
     this.currentPlayer = 0;
     this.isOpenGame = promptToSelectOption(OPTION_OPEN_CLOSE, 'o', 'c') == 'o';
-    this.isGameOver = false;
+    this.numOfConsecutivePass = 0;
   }
 
   public void run() {
@@ -122,20 +122,23 @@ public class Game {
         Entering "," passes the turn.
         """;
     int moveCount = 0;
-    while (!isGameOver) {//TODO: check tile bag, pass twice
+    Move move = null;
+    while (!isGameOver()) {//TODO: check tile bag, pass twice
       //TODO: different display for computer player
-      board.showBoard();
-      board.showStartPosition();
+      if (move == null || move.getLetters() != null && move.getDirectedPosition() != null) {
+        board.showBoard();
+        board.showStartPosition();
+      }
       if (isOpenGame) {
-        System.out.println("OPEN GAME: " + otherPlayerName(currentPlayer) + "'s tiles:");
+        System.out.println("OPEN GAME: " + playerName(otherPlayerIndex(currentPlayer)) + "'s tiles:");
         System.out.print("OPEN GAME: ");
         players[otherPlayerIndex(currentPlayer)].showRack();
       }
-      System.out.println("It's your turn, " + currentPlayerName(currentPlayer) + "! Your tiles:");
+      System.out.println("It's your turn, " + playerName(currentPlayer) + "! Your tiles:");
       players[currentPlayer].showRack();
 
       String moveString;
-      Move move = null;
+      move = null;
       boolean isMoveValid = false;
       while (move == null || !isMoveValid) {
         System.out.print(moveExplanation);
@@ -155,22 +158,24 @@ public class Game {
                 " at position " + move.getDirectedPosition() + ". Please try again.");
           } else {
             MoveExecutor.makeMove(move, board, players, currentPlayer, tileBag);
-            System.out.println(currentPlayerName(0) + " score: " + players[0].getScore());
-            System.out.println(currentPlayerName(1) + " score: " + players[1].getScore());
+            if (move.getDirectedPosition() == null && move.getLetters() == null) {
+              numOfConsecutivePass++;
+            } else {
+              numOfConsecutivePass = 0;
+              System.out.println(playerName(0) + " score: " + players[0].getScore());
+              System.out.println(playerName(1) + " score: " + players[1].getScore());
+            }
             currentPlayer = otherPlayerIndex(currentPlayer);
             moveCount++;
           }
         }
       }
     }
+    showGameResult();
   }
 
-  private String currentPlayerName(int playerIndex) {
+  private String playerName(int playerIndex) {
     return (playerIndex == 0 ? PLAYER1_NAME : PLAYER2_NAME);
-  }
-
-  private String otherPlayerName(int playerIndex) {
-    return (playerIndex == 0 ? PLAYER2_NAME : PLAYER1_NAME);
   }
 
   private int otherPlayerIndex(int currentPlayer) {
@@ -190,6 +195,23 @@ public class Game {
         System.out.println("This is not a valid choice.");
       } else
         return userChoice.charAt(0);
+    }
+  }
+
+  private boolean isGameOver() {
+    return numOfConsecutivePass >= 4 || tileBag.size() == 0;
+  }
+
+  private void showGameResult() {
+    System.out.println("Game Over!");
+    System.out.println(playerName(0) + " scored " + players[0].getScore() + " points.");
+    System.out.println(playerName(1) + " scored " + players[1].getScore() + " points.");
+    if (players[0].getScore() > players[1].getScore()) {
+      System.out.println(playerName(0) + " wins!");
+    } else if (players[0].getScore() < players[1].getScore()) {
+      System.out.println(playerName(1) + " wins!");
+    } else {
+      System.out.println("It's a draw!");
     }
   }
 
