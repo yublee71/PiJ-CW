@@ -48,8 +48,11 @@ public class Player {
 
   public Tile removeTileFromRack(char c) {
     for (int i = 0; i < rack.size(); i++) {
-      if ((c >= 'a' && c <= 'z' && rack.get(i).getLetter() == '_') ||
-          c == rack.get(i).getLetter()) {
+      if (c >= 'a' && c <= 'z' && rack.get(i).getLetter() == '_') {
+        rack.get(i).setChosenLetter(c);
+        return rack.remove(i);
+      }
+      if (c == rack.get(i).getLetter()) {
         return rack.remove(i);
       }
     }
