@@ -15,7 +15,7 @@ import java.util.Objects;
 public class MoveValidator {
   public static boolean isMoveValid(Move move, Player player, Board board, List<String> words) {
     // if pass return true
-    if (move.getLetters() == null && move.getDirectedPosition() == null)
+    if (move.getMoveType() == MoveType.PASS)
       return true;
     return isLettersInRack(player.getRack(), move.getLetters()) &&
         isPlacementValid(move, board, words);
@@ -82,6 +82,7 @@ public class MoveValidator {
       if (currentTile != null) {
         tileExists = true;
         word.append(currentTile.getLetter());
+        //TODO:reflect wildcard
       } else {
         break;
       }

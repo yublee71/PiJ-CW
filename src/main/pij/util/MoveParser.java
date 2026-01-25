@@ -1,6 +1,5 @@
 package pij.util;
 
-import pij.model.Board;
 import pij.model.DirectedPosition;
 import pij.model.Move;
 
@@ -10,7 +9,7 @@ import pij.model.Move;
  * @author Yubeen Lee
  */
 public class MoveParser {
-  public static Move parse(Board board, String moveString) {
+  public static Move parse(String moveString) {
     if (moveString == null || moveString.isEmpty())
       return null;
 
@@ -29,7 +28,7 @@ public class MoveParser {
 
     //if both empty, the move is pass
     if (letters.isEmpty() && movePositionString.isEmpty()) {
-      return new Move(null, null);
+      return Move.pass();
     }
 
     if (letters.isEmpty() || movePositionString.isEmpty()) {
@@ -44,6 +43,6 @@ public class MoveParser {
       return null;
     }
 
-    return new Move(letters, directedPosition);
+    return Move.place(letters, directedPosition);
   }
 }

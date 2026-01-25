@@ -1,9 +1,6 @@
 package pij.game;
 
-import pij.model.Board;
-import pij.model.Move;
-import pij.model.Player;
-import pij.model.TileBag;
+import pij.model.*;
 import pij.util.BoardLoader;
 import pij.util.MoveExecutor;
 import pij.util.MoveParser;
@@ -121,11 +118,11 @@ public class Game {
         are wildcards.
         Entering "," passes the turn.
         """;
-    int moveCount = 0;
+    int placeMoveCount = 0;
     Move move = null;
     while (!isGameOver()) {//TODO: check tile bag, pass twice
       //TODO: different display for computer player
-      if (move == null || move.getLetters() != null && move.getDirectedPosition() != null) {
+      if (move == null || move.getMoveType() != MoveType.PASS) {
         board.showBoard();
         board.showStartPosition();
       }
@@ -143,30 +140,32 @@ public class Game {
       while (move == null || !isMoveValid) {
         System.out.print(moveExplanation);
         moveString = scan.nextLine();
-        move = MoveParser.parse(board, moveString);
+        move = MoveParser.parse(moveString);
         if (move == null) {
           System.out.println("Illegal move format");
         } else {
           System.out.print("The move is:    ");
           System.out.println(move);
-          if (moveCount == 0) {
-            move.setIsFirstMove(true);
-          }
-          isMoveValid = MoveValidator.isMoveValid(move, players[currentPlayer], board, words);
-          if (!isMoveValid) {
-            System.out.println("The board does not permit word " + move.getLetters() +
-                " at position " + move.getDirectedPosition() + ". Please try again.");
+          if (move.getMoveType() == MoveType.PASS) {
+            numOfConsecutivePass++;
+            currentPlayer = otherPlayerIndex(currentPlayer);
+            isMoveValid = true;
           } else {
-            MoveExecutor.makeMove(move, board, players, currentPlayer, tileBag);
-            if (move.getDirectedPosition() == null && move.getLetters() == null) {
-              numOfConsecutivePass++;
+            if (placeMoveCount == 0) {
+              move.setIsFirstMove(true);
+            }
+            isMoveValid = MoveValidator.isMoveValid(move, players[currentPlayer], board, words);
+            if (!isMoveValid) {
+              System.out.println("The board does not permit word " + move.getLetters() +
+                  " at position " + move.getDirectedPosition() + ". Please try again.");
             } else {
+              MoveExecutor.makeMove(move, board, players, currentPlayer, tileBag);
               numOfConsecutivePass = 0;
+              placeMoveCount++;
               System.out.println(playerName(0) + " score: " + players[0].getScore());
               System.out.println(playerName(1) + " score: " + players[1].getScore());
+              currentPlayer = otherPlayerIndex(currentPlayer);
             }
-            currentPlayer = otherPlayerIndex(currentPlayer);
-            moveCount++;
           }
         }
       }
