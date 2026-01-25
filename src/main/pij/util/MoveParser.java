@@ -40,7 +40,7 @@ public class MoveParser {
 
 
     DirectedPosition directedPosition = DirectedPosition.stringToDirectedPosition(movePositionString);
-    if (directedPosition == null || !board.isPositionInBoard(directedPosition.getStartPosition())) {
+    if (directedPosition == null) {
       return null;
     }
 
