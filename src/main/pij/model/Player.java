@@ -61,4 +61,8 @@ public class Player {
       rack.add(tile);
     }
   }
+
+  public void addScore(int score) {
+    this.score += score;
+  }
 }

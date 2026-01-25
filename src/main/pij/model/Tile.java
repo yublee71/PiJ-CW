@@ -66,4 +66,8 @@ public class Tile {
   public char getLetter() {
     return letter;
   }
+
+  public int getValue() {
+    return value;
+  }
 }

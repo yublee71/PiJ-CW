@@ -169,34 +169,42 @@ public class Game {
     String letters = move.getLetters();
     int lettersLength = move.getLetters().length();
     Tile[][] tileGrid = board.getTileGrid();
+    Square[][] squareGrid = board.getSquareGrid();
 
     int col = moveStartPosition.col();
     int row = moveStartPosition.row();
     int i = 0;
-    if (moveDirection == Direction.HORIZONTAL) {
-      while (i < lettersLength && col < board.getColumns()) {
-        if (tileGrid[row][col] == null) {
-          tileGrid[row][col] = players[currentPlayer].removeTileFromRack(letters.charAt(i));
-          players[currentPlayer].addTileToRack(tileBag.drawTile());
-          i++;
+    int premiumWordFactor = 1;
+    int premiumLetterFactor = 1;
+    int score = 0;
+    Square currentSquare;
+    while ((moveDirection == Direction.HORIZONTAL && i < lettersLength && col < board.getColumns()) ||
+        (moveDirection == Direction.VERTICAL && i < lettersLength && row < board.getRows())) {
+      if (tileGrid[row][col] == null) {
+        tileGrid[row][col] = players[currentPlayer].removeTileFromRack(letters.charAt(i));
+        players[currentPlayer].addTileToRack(tileBag.drawTile());
+        currentSquare = squareGrid[row][col];
+        if (currentSquare.getType() == SquareType.WORD_PREMIUM) {
+          premiumWordFactor *= currentSquare.getValue();
+        } else if (currentSquare.getType() == SquareType.LETTER_PREMIUM) {
+          premiumLetterFactor = currentSquare.getValue();
+        } else {
+          premiumLetterFactor = 1;
         }
-        col++;
+        i++;
       }
-    } else if (moveDirection == Direction.VERTICAL) {
-      while (i < lettersLength && row < board.getRows()) {
-        if (tileGrid[row][col] == null) {
-          tileGrid[row][col] = players[currentPlayer].removeTileFromRack(letters.charAt(i));
-          players[currentPlayer].addTileToRack(tileBag.drawTile());
-          i++;
-        }
+      score += tileGrid[row][col].getValue() * premiumLetterFactor;
+      if (moveDirection == Direction.HORIZONTAL) {
+        col++;
+      } else {
         row++;
       }
-
-      //TODO: update scores
-      System.out.println("Player 1 score: " + players[0].getScore());
-      System.out.println("Player 2 score: " + players[1].getScore());
-
-      currentPlayer = otherPlayerIndex(currentPlayer);
     }
+    players[currentPlayer].addScore(score * premiumWordFactor + (lettersLength == 7 ? 60 : 0));
+
+    System.out.println("Player 1 score: " + players[0].getScore());
+    System.out.println("Player 2 score: " + players[1].getScore());
+
+    currentPlayer = otherPlayerIndex(currentPlayer);
   }
 }

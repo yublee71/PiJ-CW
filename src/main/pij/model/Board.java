@@ -101,7 +101,6 @@ public class Board {
 
   public void showBoard() {
     System.out.println();
-    System.out.println();
     printColumnIndex();
     String formattedRow;
     for (int row = 0; row < rows; row++) {
@@ -141,5 +140,9 @@ public class Board {
 
   public Tile[][] getTileGrid() {
     return tileGrid;
+  }
+
+  public Square[][] getSquareGrid() {
+    return squareGrid;
   }
 }

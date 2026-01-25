@@ -22,6 +22,14 @@ public class Square {
     this.type = type;
   }
 
+  public SquareType getType() {
+    return type;
+  }
+
+  public int getValue() {
+    return value;
+  }
+
   @Override
   public String toString() {
     return switch (type) {
