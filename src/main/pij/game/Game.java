@@ -18,12 +18,20 @@ public class Game {
       ============ S c r a e B B K l e ============
       ============                     ============
       """;
+
+  public static final String RESET = "\u001B[0m";
+  public static final String BLUE = "\u001B[34m";
+  public static final String PINK = "\u001B[95m";
+
+  private static final String PLAYER1_NAME = BLUE + "Player 1" + RESET;
+  private static final String PLAYER2_NAME = PINK + "Player 2" + RESET;
+
   private static final String OPTION_BOARD =
       "Would you like to _l_oad a board or use the _d_efault board?";
   private static final String OPTION_PLAYER1 =
-      "Is Player 1 a _h_uman player or a _c_omputer player?";
+      "Is " + PLAYER1_NAME + " a _h_uman player or a _c_omputer player?";
   private static final String OPTION_PLAYER2 =
-      "Is Player 2 a _h_uman player or a _c_omputer player?";
+      "Is " + PLAYER2_NAME + " a _h_uman player or a _c_omputer player?";
   private static final String OPTION_OPEN_CLOSE =
       "Would you like to play an _o_pen or a _c_losed game?";
 
@@ -33,9 +41,6 @@ public class Game {
       "The file is not a valid file. ";
   private static final String PROMPT_BOARD_FILE =
       "Please enter the file name of the board: ";
-
-  private static final String PLAYER1_NAME = "Player 1";
-  private static final String PLAYER2_NAME = "Player 2";
 
 
   private final Board board;
@@ -202,8 +207,8 @@ public class Game {
     }
     players[currentPlayer].addScore(score * premiumWordFactor + (lettersLength == 7 ? 60 : 0));
 
-    System.out.println("Player 1 score: " + players[0].getScore());
-    System.out.println("Player 2 score: " + players[1].getScore());
+    System.out.println(currentPlayerName(0) + " score: " + players[0].getScore());
+    System.out.println(currentPlayerName(1) + " score: " + players[1].getScore());
 
     currentPlayer = otherPlayerIndex(currentPlayer);
   }
