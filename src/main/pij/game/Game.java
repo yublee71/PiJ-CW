@@ -1,7 +1,11 @@
 package pij.game;
 
-import pij.model.*;
+import pij.model.Board;
+import pij.model.Move;
+import pij.model.Player;
+import pij.model.TileBag;
 import pij.util.BoardLoader;
+import pij.util.MoveExecutor;
 import pij.util.MoveParser;
 import pij.util.MoveValidator;
 
@@ -150,7 +154,10 @@ public class Game {
             System.out.println("The board does not permit word " + move.getLetters() +
                 " at position " + move.getDirectedPosition() + ". Please try again.");
           } else {
-            makeMove(move);
+            MoveExecutor.makeMove(move, board, players, currentPlayer, tileBag);
+            System.out.println(currentPlayerName(0) + " score: " + players[0].getScore());
+            System.out.println(currentPlayerName(1) + " score: " + players[1].getScore());
+            currentPlayer = otherPlayerIndex(currentPlayer);
             moveCount++;
           }
         }
@@ -186,89 +193,4 @@ public class Game {
     }
   }
 
-  //TODO: handle the very first move
-  private void makeMove(Move move) {
-
-    if (move.getDirectedPosition() == null && move.getLetters() == null) {
-      currentPlayer = otherPlayerIndex(currentPlayer);
-      return;
-    }
-
-    Direction moveDirection = move.getDirectedPosition().getDirection();
-    Position moveStartPosition = move.getDirectedPosition().getStartPosition();
-    String letters = move.getLetters();
-    int lettersLength = move.getLetters().length();
-    Tile[][] tileGrid = board.getTileGrid();
-    Square[][] squareGrid = board.getSquareGrid();
-
-    int col = moveStartPosition.col();
-    int row = moveStartPosition.row();
-    int j = 0;
-    int premiumWordFactor = 1;
-    int premiumLetterFactor = 1;
-    int score = 0;
-    Square currentSquare;
-
-    Tile currentTile;
-    int i = 1;
-    while ((moveDirection == Direction.HORIZONTAL && col - i < board.getColumns()) && col - i >= 0 ||
-        (moveDirection == Direction.VERTICAL && row - i < board.getRows() && row - i >= 0)) {
-      if (moveDirection == Direction.HORIZONTAL)
-        currentTile = tileGrid[row][col - i];
-      else {
-        currentTile = tileGrid[row - i][col];
-      }
-      if (currentTile != null) {
-        score += currentTile.getValue();
-      } else {
-        break;
-      }
-      i++;
-    }
-
-
-    while (j < lettersLength && col < board.getColumns() && row < board.getRows()) {
-      if (tileGrid[row][col] == null) {
-        tileGrid[row][col] = players[currentPlayer].removeTileFromRack(letters.charAt(j));
-        players[currentPlayer].addTileToRack(tileBag.drawTile());
-        currentSquare = squareGrid[row][col];
-        if (currentSquare.getType() == SquareType.WORD_PREMIUM) {
-          premiumWordFactor *= currentSquare.getValue();
-        } else if (currentSquare.getType() == SquareType.LETTER_PREMIUM) {
-          premiumLetterFactor = currentSquare.getValue();
-        } else {
-          premiumLetterFactor = 1;
-        }
-        j++;
-      }
-      score += tileGrid[row][col].getValue() * premiumLetterFactor;
-      if (moveDirection == Direction.HORIZONTAL) {
-        col++;
-      } else {
-        row++;
-      }
-    }
-
-    int k = 1;
-    while ((moveDirection == Direction.HORIZONTAL && col + k < board.getColumns()) && col + k >= 0 ||
-        (moveDirection == Direction.VERTICAL && row + k < board.getRows() && row + k >= 0)) {
-      if (moveDirection == Direction.HORIZONTAL)
-        currentTile = tileGrid[row][col + k];
-      else {
-        currentTile = tileGrid[row + k][col];
-      }
-      if (currentTile != null) {
-        score += currentTile.getValue();
-      } else {
-        break;
-      }
-      k++;
-    }
-    players[currentPlayer].addScore(score * premiumWordFactor + (lettersLength == 7 ? 60 : 0));
-
-    System.out.println(currentPlayerName(0) + " score: " + players[0].getScore());
-    System.out.println(currentPlayerName(1) + " score: " + players[1].getScore());
-
-    currentPlayer = otherPlayerIndex(currentPlayer);
-  }
 }
