@@ -1,9 +1,6 @@
 package pij.game;
 
-import pij.model.Board;
-import pij.model.Move;
-import pij.model.Player;
-import pij.model.TileBag;
+import pij.model.*;
 import pij.util.BoardLoader;
 import pij.util.MoveParser;
 import pij.util.MoveValidator;
@@ -107,8 +104,6 @@ public class Game {
       System.out.println("It's your turn, " + currentPlayerName(currentPlayer) + "! Your tiles:");
       players[currentPlayer].showRack();
 
-      //TODO: implement move
-
       String moveString;
       Move move = null;
       boolean isMoveValid = false;
@@ -123,10 +118,10 @@ public class Game {
           System.out.println(move);
           isMoveValid = MoveValidator.isMoveValid(move, players[currentPlayer], board);
           if (!isMoveValid) {
-            System.out.println("Cannot make this move. Please try again.");
+            System.out.println("The board does not permit word " + move.getLetters() +
+                " at position " + move.getDirectedPosition() + ". Please try again.");
           } else {
-            //TODO: make move
-            currentPlayer = 1 - currentPlayer;
+            makeMove(move);
           }
         }
       }
@@ -158,6 +153,50 @@ public class Game {
         System.out.println("This is not a valid choice.");
       } else
         return userChoice.charAt(0);
+    }
+  }
+
+  //TODO: handle the very first move
+  private void makeMove(Move move) {
+
+    if (move.getDirectedPosition() == null && move.getLetters() == null) {
+      currentPlayer = otherPlayerIndex(currentPlayer);
+      return;
+    }
+
+    Direction moveDirection = move.getDirectedPosition().getDirection();
+    Position moveStartPosition = move.getDirectedPosition().getStartPosition();
+    String letters = move.getLetters();
+    int lettersLength = move.getLetters().length();
+    Tile[][] tileGrid = board.getTileGrid();
+
+    int col = moveStartPosition.col();
+    int row = moveStartPosition.row();
+    int i = 0;
+    if (moveDirection == Direction.HORIZONTAL) {
+      while (i < lettersLength && col < board.getColumns()) {
+        if (tileGrid[row][col] == null) {
+          tileGrid[row][col] = players[currentPlayer].removeTileFromRack(letters.charAt(i));
+          players[currentPlayer].addTileToRack(tileBag.drawTile());
+          i++;
+        }
+        col++;
+      }
+    } else if (moveDirection == Direction.VERTICAL) {
+      while (i < lettersLength && row < board.getRows()) {
+        if (tileGrid[row][col] == null) {
+          tileGrid[row][col] = players[currentPlayer].removeTileFromRack(letters.charAt(i));
+          players[currentPlayer].addTileToRack(tileBag.drawTile());
+          i++;
+        }
+        row++;
+      }
+
+      //TODO: update scores
+      System.out.println("Player 1 score: " + players[0].getScore());
+      System.out.println("Player 2 score: " + players[1].getScore());
+
+      currentPlayer = otherPlayerIndex(currentPlayer);
     }
   }
 }

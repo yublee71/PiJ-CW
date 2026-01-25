@@ -45,4 +45,20 @@ public class Player {
   public List<Tile> getRack() {
     return rack;
   }
+
+  public Tile removeTileFromRack(char c) {
+    for (int i = 0; i < rack.size(); i++) {
+      if ((c >= 'a' && c <= 'z' && rack.get(i).getLetter() == '_') ||
+          c == rack.get(i).getLetter()) {
+        return rack.remove(i);
+      }
+    }
+    return null;
+  }
+
+  public void addTileToRack(Tile tile) {
+    if (tile != null) {
+      rack.add(tile);
+    }
+  }
 }
