@@ -5,6 +5,11 @@ import pij.util.BoardLoader;
 import pij.util.MoveParser;
 import pij.util.MoveValidator;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.List;
 import java.util.Scanner;
 
 /**
@@ -42,6 +47,9 @@ public class Game {
   private static final String PROMPT_BOARD_FILE =
       "Please enter the file name of the board: ";
 
+  public static final String RESOURCE_FOLDER_NAME = "resources";
+  public static final String DEFAULT_BOARD_FILE_NAME = "defaultBoard.txt";
+  private static final String WORD_LIST_FILE_NAME = "wordlist.txt";
 
   private final Board board;
   private final TileBag tileBag;
@@ -49,6 +57,7 @@ public class Game {
   private int currentPlayer;
   private boolean isGameOver;
   private final boolean isOpenGame;
+  private final List<String> words;
 
   public Game() {
     System.out.println(GAME_BANNER);
@@ -76,6 +85,17 @@ public class Game {
         }
       }
     }
+
+
+    Path filePath = Paths.get(Game.RESOURCE_FOLDER_NAME, WORD_LIST_FILE_NAME);
+    List<String> lines;
+    try {
+      lines = Files.readAllLines(filePath);
+      this.words = lines;
+    } catch (IOException e) {
+      throw new IllegalArgumentException("Couldn't load word list");
+    }
+
     this.board = tmpBoard;
     this.tileBag = new TileBag();
     this.players = new Player[2];
@@ -125,7 +145,7 @@ public class Game {
           if (moveCount == 0) {
             move.setIsFirstMove(true);
           }
-          isMoveValid = MoveValidator.isMoveValid(move, players[currentPlayer], board);
+          isMoveValid = MoveValidator.isMoveValid(move, players[currentPlayer], board, words);
           if (!isMoveValid) {
             System.out.println("The board does not permit word " + move.getLetters() +
                 " at position " + move.getDirectedPosition() + ". Please try again.");
@@ -228,7 +248,7 @@ public class Game {
         row++;
       }
     }
-    
+
     int k = 1;
     while ((moveDirection == Direction.HORIZONTAL && col + k < board.getColumns()) && col + k >= 0 ||
         (moveDirection == Direction.VERTICAL && row + k < board.getRows() && row + k >= 0)) {

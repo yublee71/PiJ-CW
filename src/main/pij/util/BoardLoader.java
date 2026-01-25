@@ -1,5 +1,6 @@
 package pij.util;
 
+import pij.game.Game;
 import pij.model.Board;
 import pij.model.Position;
 import pij.model.Square;
@@ -18,11 +19,9 @@ import java.util.List;
  */
 public class BoardLoader {
   //TODO: clean up exception logic
-  private static final String DEFAULT_BOARD_FILENAME = "defaultBoard.txt";
-  private static final String RESOURCE_FOLDER_NAME = "resources";
 
   public static Board loadBoard(String fileName) {
-    Path filePath = Paths.get(RESOURCE_FOLDER_NAME, fileName);
+    Path filePath = Paths.get(Game.RESOURCE_FOLDER_NAME, fileName);
     List<String> lines;
 
     try {
@@ -110,6 +109,6 @@ public class BoardLoader {
   }
 
   public static Board loadBoard() {
-    return loadBoard(DEFAULT_BOARD_FILENAME);
+    return loadBoard(Game.DEFAULT_BOARD_FILE_NAME);
   }
 }
