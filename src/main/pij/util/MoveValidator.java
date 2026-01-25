@@ -13,6 +13,9 @@ import java.util.Objects;
  */
 public class MoveValidator {
   public static boolean isMoveValid(Move move, Player player, Board board) {
+    // if pass return true
+    if (move.getLetters() == null && move.getDirectedPosition() == null)
+      return true;
     return isLettersInRack(player.getRack(), move.getLetters()) &&
         isPlacementValid(move, board) &&
         isWordValid(move, board);
