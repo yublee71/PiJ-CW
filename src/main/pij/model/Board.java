@@ -100,7 +100,6 @@ public class Board {
   }
 
   public void showBoard() {
-    System.out.println();
     printColumnIndex();
     String formattedRow;
     for (int row = 0; row < rows; row++) {
@@ -119,10 +118,12 @@ public class Board {
   }
 
   private void printColumnIndex() {
+    System.out.println();
     System.out.print("   ");
     for (int col = 0; col < columns; col++) {
       System.out.print(" " + (char) ('a' + col) + " ");
     }
+    System.out.println();
     System.out.println();
   }
 
