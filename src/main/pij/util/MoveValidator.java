@@ -63,8 +63,8 @@ public class MoveValidator {
     StringBuilder word = new StringBuilder();
     int col = moveStartPosition.col();
     int row = moveStartPosition.row();
-    //if start position is occupied return false
-    if (tileGrid[row][col] != null)
+    //if start position is out of board or already occupied return false
+    if (!board.isPositionInBoard(new Position(col, row)) || tileGrid[row][col] != null)
       return false;
     //TODO: check start position for the first move
     //TODO: check the other direction
