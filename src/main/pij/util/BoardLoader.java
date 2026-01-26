@@ -1,6 +1,5 @@
 package pij.util;
 
-import pij.game.Game;
 import pij.model.Board;
 import pij.model.Position;
 import pij.model.Square;
@@ -9,7 +8,6 @@ import pij.model.SquareType;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.List;
 
 /**
@@ -20,15 +18,13 @@ import java.util.List;
 public class BoardLoader {
   //TODO: clean up exception logic
 
-  public static Board loadBoard(String fileName) {
-    Path filePath = Paths.get(Game.RESOURCE_FOLDER_NAME, fileName);
+  public static Board loadBoard(Path filePath) {
     List<String> lines;
 
     try {
       lines = Files.readAllLines(filePath);
-//      lines.forEach(System.out::println);
     } catch (IOException e) {
-      throw new IllegalArgumentException("This is not a valid file: " + fileName);
+      throw new IllegalArgumentException("This is not a valid file.");
     }
 
     if (lines.size() < 3) {
@@ -106,9 +102,5 @@ public class BoardLoader {
     if (i != line.length() || colIndex != columns) {
       throw new IllegalArgumentException("Invalid board configuration: line length does not match column count.");
     }
-  }
-
-  public static Board loadBoard() {
-    return loadBoard(Game.DEFAULT_BOARD_FILE_NAME);
   }
 }

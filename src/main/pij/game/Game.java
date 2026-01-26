@@ -64,10 +64,12 @@ public class Game {
     System.out.println(GAME_BANNER);
 
     Board tmpBoard = null;
+    Path boardFilePath;
     boolean isDefaultBoard = promptToSelectOption(OPTION_BOARD, 'l', 'd') == 'd';
     if (isDefaultBoard) {
+      boardFilePath = Paths.get(RESOURCE_FOLDER_NAME, DEFAULT_BOARD_FILE_NAME);
       try {
-        tmpBoard = BoardLoader.loadBoard();
+        tmpBoard = BoardLoader.loadBoard(boardFilePath);
       } catch (IllegalArgumentException e) {
         throw new IllegalArgumentException(ERR_INVALID_DEFAULT_BOARD, e);
       }
@@ -78,8 +80,9 @@ public class Game {
       while (!isBoardLoaded) {
         System.out.print(PROMPT_BOARD_FILE);
         fileName = scan.nextLine();
+        boardFilePath = Paths.get(RESOURCE_FOLDER_NAME, fileName);
         try {
-          tmpBoard = BoardLoader.loadBoard(fileName);
+          tmpBoard = BoardLoader.loadBoard(boardFilePath);
           isBoardLoaded = true;
         } catch (IllegalArgumentException e) {
           System.out.print(ERR_INVALID_FILE);
@@ -88,10 +91,10 @@ public class Game {
     }
 
 
-    Path filePath = Paths.get(Game.RESOURCE_FOLDER_NAME, WORD_LIST_FILE_NAME);
+    Path wordListFilePath = Paths.get(RESOURCE_FOLDER_NAME, WORD_LIST_FILE_NAME);
     List<String> lines;
     try {
-      lines = Files.readAllLines(filePath);
+      lines = Files.readAllLines(wordListFilePath);
       this.words = lines;
     } catch (IOException e) {
       throw new IllegalArgumentException("Couldn't load word list");
