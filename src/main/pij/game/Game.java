@@ -1,10 +1,9 @@
 package pij.game;
 
 import pij.model.*;
-import pij.util.*;
-
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import pij.util.MoveExecutor;
+import pij.util.MoveParser;
+import pij.util.MoveValidator;
 
 /**
  *
@@ -12,11 +11,6 @@ import java.nio.file.Paths;
  * @author Yubeen Lee
  */
 public class Game {
-  private static final String ERR_INVALID_DEFAULT_BOARD =
-      "The default board is invalid. Game exiting...";
-  private static final String ERR_INVALID_FILE =
-      "The file is not a valid file. ";
-
   private final Board board;
   private final Dictionary dictionary;
   private final TileBag tileBag;
@@ -26,43 +20,15 @@ public class Game {
   private final boolean isOpenGame;
   private int numOfConsecutivePass;
 
-  public Game() {
-    GameUI.showGameBanner();
-
-    Board tmpBoard = null;
-    Path boardFilePath;
-    boolean isDefaultBoard = GameUI.userChoseDefaultBoard();
-    if (isDefaultBoard) {
-      boardFilePath = Paths.get(GameConfig.RESOURCE_FOLDER_NAME, GameConfig.DEFAULT_BOARD_FILE_NAME);
-      try {
-        tmpBoard = BoardLoader.loadBoard(boardFilePath);
-      } catch (IllegalArgumentException e) {
-        throw new IllegalArgumentException(ERR_INVALID_DEFAULT_BOARD, e);
-      }
-    } else {
-      boolean isBoardLoaded = false;
-      String fileName;
-      while (!isBoardLoaded) {
-        fileName = GameUI.promptBoardFileName();
-        boardFilePath = Paths.get(GameConfig.RESOURCE_FOLDER_NAME, fileName);
-        try {
-          tmpBoard = BoardLoader.loadBoard(boardFilePath);
-          isBoardLoaded = true;
-        } catch (IllegalArgumentException e) {
-          System.out.print(ERR_INVALID_FILE);
-        }
-      }
-    }
-
-    Path wordListFilePath = Paths.get(GameConfig.RESOURCE_FOLDER_NAME, GameConfig.WORD_LIST_FILE_NAME);
-    this.dictionary = DictionaryLoader.loadDictionary(wordListFilePath);
-
-    this.board = tmpBoard;
-    this.tileBag = new TileBag();
-    this.players[0] = new Player(GameUI.userChoseHumanPlayer(0), tileBag);
-    this.players[1] = new Player(GameUI.userChoseHumanPlayer(1), tileBag);
+  public Game(Board board, TileBag tileBag, Dictionary dictionary,
+              Player player1, Player player2, boolean isOpenGame) {
+    this.board = board;
+    this.dictionary = dictionary;
+    this.tileBag = tileBag;
+    this.players[0] = player1;
+    this.players[1] = player2;
     this.currentPlayerIndex = 0;
-    this.isOpenGame = GameUI.userChoseOpenGame();
+    this.isOpenGame = isOpenGame;
     this.numOfConsecutivePass = 0;
   }
 

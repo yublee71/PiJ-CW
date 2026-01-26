@@ -22,6 +22,8 @@ public class GameUI {
   private static final String PLAYER1_NAME = BLUE + "Player 1" + RESET;
   private static final String PLAYER2_NAME = PINK + "Player 2" + RESET;
 
+  public static final String ERR_MSG_INVALID_FILE = "This is not a valid file. ";
+
   public static void showGameBanner() {
     System.out.println("""
         ============                     ============
