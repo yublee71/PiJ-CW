@@ -13,12 +13,12 @@ import java.util.Objects;
  * @author Yubeen Lee
  */
 public class MoveValidator {
-  public static boolean isMoveValid(Move move, Player player, Board board, List<String> words) {
+  public static boolean isMoveValid(Move move, Player player, Board board, Dictionary dictionary) {
     // if pass return true
     if (move.getMoveType() == MoveType.PASS)
       return true;
     return isLettersInRack(player.getRack(), move.getLetters()) &&
-        isPlacementValid(move, board, words);
+        isPlacementValid(move, board, dictionary);
   }
 
   public static boolean isLettersInRack(List<Tile> rack, String letters) {
@@ -50,7 +50,7 @@ public class MoveValidator {
     return true;
   }
 
-  public static boolean isPlacementValid(Move move, Board board, List<String> words) {
+  public static boolean isPlacementValid(Move move, Board board, Dictionary dictionary) {
     Objects.requireNonNull(move, "Move cannot be null");
     Objects.requireNonNull(board, "Board cannot be null");
 
@@ -128,15 +128,6 @@ public class MoveValidator {
     //TODO: test
     //TODO: word validation
     System.out.println(finalWord);
-    return j == lettersLength && (tileExists || move.isFirstMove()) && isWordValid(finalWord, words);
-  }
-
-  public static boolean isWordValid(String word, List<String> words) {
-    for (String line : words) {
-      if (word.equalsIgnoreCase(line)) {
-        return true;
-      }
-    }
-    return false;
+    return j == lettersLength && (tileExists || move.isFirstMove()) && dictionary.contains(finalWord);
   }
 }

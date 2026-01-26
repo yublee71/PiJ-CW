@@ -1,16 +1,10 @@
 package pij.game;
 
 import pij.model.*;
-import pij.util.BoardLoader;
-import pij.util.MoveExecutor;
-import pij.util.MoveParser;
-import pij.util.MoveValidator;
+import pij.util.*;
 
-import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.List;
 import java.util.Scanner;
 
 /**
@@ -53,11 +47,11 @@ public class Game {
   private static final String WORD_LIST_FILE_NAME = "wordlist.txt";
 
   private final Board board;
+  private final Dictionary dictionary;
   private final TileBag tileBag;
   private final Player[] players;
   private int currentPlayer;
   private final boolean isOpenGame;
-  private final List<String> words;
   private int numOfConsecutivePass;
 
   public Game() {
@@ -90,15 +84,8 @@ public class Game {
       }
     }
 
-
     Path wordListFilePath = Paths.get(RESOURCE_FOLDER_NAME, WORD_LIST_FILE_NAME);
-    List<String> lines;
-    try {
-      lines = Files.readAllLines(wordListFilePath);
-      this.words = lines;
-    } catch (IOException e) {
-      throw new IllegalArgumentException("Couldn't load word list");
-    }
+    this.dictionary = DictionaryLoader.loadDictionary(wordListFilePath);
 
     this.board = tmpBoard;
     this.tileBag = new TileBag();
@@ -157,7 +144,7 @@ public class Game {
             if (placeMoveCount == 0) {
               move.setIsFirstMove(true);
             }
-            isMoveValid = MoveValidator.isMoveValid(move, players[currentPlayer], board, words);
+            isMoveValid = MoveValidator.isMoveValid(move, players[currentPlayer], board, dictionary);
             if (!isMoveValid) {
               System.out.println("The board does not permit word " + move.getLetters() +
                   " at position " + move.getDirectedPosition() + ". Please try again.");
