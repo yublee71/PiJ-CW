@@ -1,9 +1,6 @@
 package pij.game;
 
-import pij.model.Board;
-import pij.model.Player;
-import pij.model.Square;
-import pij.model.Tile;
+import pij.model.*;
 
 import java.util.Scanner;
 
@@ -112,6 +109,20 @@ public class GameUI {
     }
     System.out.println("It's your turn, " + playerName(currentPlayerIndex) + "! Your tiles:");
     players[currentPlayerIndex].showRack();
+  }
+
+  public static void showError_IllegalMoveFormat() {
+    System.out.println("Illegal move format");
+  }
+
+  public static void showError_InvalidMove(Move move) {
+    System.out.println("The board does not permit word " + move.getLetters() +
+        " at position " + move.getDirectedPosition() + ". Please try again.");
+  }
+
+  public static void showMove(Move move) {
+    System.out.print("The move is:    ");
+    System.out.println(move);
   }
 
   public static void showScore(int[] scoreBoard) {

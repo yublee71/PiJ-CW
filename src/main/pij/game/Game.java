@@ -19,6 +19,7 @@ public class Game {
   private int currentPlayerIndex;
   private final boolean isOpenGame;
   private int numOfConsecutivePass;
+  private int numOfPlaceMoveMade;
 
   public Game(Board board, TileBag tileBag, Dictionary dictionary,
               Player player1, Player player2, boolean isOpenGame) {
@@ -30,50 +31,58 @@ public class Game {
     this.currentPlayerIndex = 0;
     this.isOpenGame = isOpenGame;
     this.numOfConsecutivePass = 0;
+    this.numOfPlaceMoveMade = 0;
   }
 
   public void run() {
-    int placeMoveCount = 0;
-    Move move = null;
-    while (!isGameOver()) {//TODO: check tile bag, pass twice
-      //TODO: different display for computer player
-      if (move == null || move.getMoveType() != MoveType.PASS) {
-        GameUI.showBoard(board);
-      }
-      GameUI.showRack(isOpenGame, players, currentPlayerIndex);
-      move = null;
-      boolean isMoveValid = false;
-      while (move == null || !isMoveValid) {
-        move = MoveParser.parse(GameUI.promptMove());
-        if (move == null) {
-          System.out.println("Illegal move format");
-        } else {
-          System.out.print("The move is:    ");
-          System.out.println(move);
-          if (move.getMoveType() == MoveType.PASS) {
-            numOfConsecutivePass++;
-            updateCurrentPlayerIndex();
-            isMoveValid = true;
-          } else {
-            if (placeMoveCount == 0) {
-              move.setIsFirstMove(true);
-            }
-            isMoveValid = MoveValidator.isMoveValid(move, players[currentPlayerIndex], board, dictionary);
-            if (!isMoveValid) {
-              System.out.println("The board does not permit word " + move.getLetters() +
-                  " at position " + move.getDirectedPosition() + ". Please try again.");
-            } else {
-              MoveExecutor.makeMove(move, board, players, currentPlayerIndex, tileBag);
-              numOfConsecutivePass = 0;
-              placeMoveCount++;
-              GameUI.showScore(updateScoreBoard());
-              updateCurrentPlayerIndex();
-            }
-          }
-        }
-      }
+    while (!isGameOver()) {
+      playOneTurn();
     }
     GameUI.showGameResult(updateScoreBoard());
+  }
+
+  private void playOneTurn() {
+    //TODO: different display for computer player
+    if (numOfConsecutivePass == 0) {
+      GameUI.showBoard(board); //show board if previous move is not pass
+    }
+
+    GameUI.showRack(isOpenGame, players, currentPlayerIndex);
+
+    while (true) {
+      Move move = MoveParser.parse(GameUI.promptMove());
+
+      if (move == null) {
+        GameUI.showError_IllegalMoveFormat();
+        continue;
+      }
+
+      GameUI.showMove(move);
+
+      if (numOfPlaceMoveMade == 0) {
+        move.setIsFirstMove(true);
+      }
+
+      if (MoveValidator.isMoveValid(move, players[currentPlayerIndex], board, dictionary)) {
+        handleMove(move);
+        break;
+      } else {
+        GameUI.showError_InvalidMove(move);
+      }
+    }
+  }
+
+
+  private void handleMove(Move move) {
+    if (move.getMoveType() == MoveType.PASS) {
+      numOfConsecutivePass++;
+    } else {
+      MoveExecutor.applyMove(move, board, players, currentPlayerIndex, tileBag);
+      numOfConsecutivePass = 0;
+      numOfPlaceMoveMade++;
+      GameUI.showScore(updateScoreBoard());
+    }
+    updateCurrentPlayerIndex();
   }
 
   private void updateCurrentPlayerIndex() {

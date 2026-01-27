@@ -9,7 +9,7 @@ import pij.model.*;
  */
 public class MoveExecutor {
   //TODO: handle the very first move
-  public static void makeMove(Move move, Board board, Player[] players, int currentPlayer, TileBag tileBag) {
+  public static void applyMove(Move move, Board board, Player[] players, int currentPlayer, TileBag tileBag) {
     if (move.getDirectedPosition() == null && move.getLetters() == null) {
       return;
     }
