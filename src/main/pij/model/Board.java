@@ -60,8 +60,8 @@ public class Board {
   }
 
   public boolean isPositionInBoard(Position position) {
-    return !(position.col() < 0 || position.col() >= columns ||
-        position.row() < 0 || position.row() >= rows);
+    return position.col() >= 0 && position.col() < columns &&
+        position.row() >= 0 && position.row() < rows;
   }
 
   public void putSquare(int col, int row, Square square) {

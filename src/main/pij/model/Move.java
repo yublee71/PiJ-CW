@@ -41,6 +41,14 @@ public class Move {
     return directedPosition;
   }
 
+  public Position getMoveStartPosition() {
+    return directedPosition.getStartPosition();
+  }
+
+  public Direction getMoveDirection() {
+    return directedPosition.getDirection();
+  }
+
   public void setIsFirstMove(boolean isFirstMove) {
     this.isFirstMove = isFirstMove;
   }
