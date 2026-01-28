@@ -51,7 +51,8 @@ public class BoardIterator {
       }
 
       if (tile == null) {
-        emptyTileHandler.handle(new Position(startCol, startRow), iterateIndex);
+        if (!emptyTileHandler.handle(new Position(startCol, startRow), iterateIndex))
+          break;
         iterateIndex++;
       } else {
         existingTileHandler.handle(tile);

@@ -47,6 +47,7 @@ public class MoveExecutor {
           score[0] += tileValue * premiumLetterFactor;
           tileGrid[position.row()][position.col()] = tile;
           player.addTileToRack(tileBag.drawTile());
+          return true;
         }),
         letters.length());
 

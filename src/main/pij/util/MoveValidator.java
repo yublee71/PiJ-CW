@@ -66,8 +66,6 @@ public class MoveValidator {
     }
 
     String word = buildWord(move, board);
-    //TODO: check start position for the first move
-    //TODO: test
     System.out.println(word);
     return word != null && (word.length() > move.getLetters().length() || move.isFirstMove());
 //        && dictionary.contains(word);
@@ -110,9 +108,10 @@ public class MoveValidator {
         },
         (position, i) -> {
           if (!isAdjacentFree(move.getMoveDirection(), position, board)) {
-            return;
+            return false;
           }
           word.append(letters.charAt(i));
+          return true;
         },
         letters.length()
     );
@@ -120,7 +119,11 @@ public class MoveValidator {
     if (iterateIndex < letters.length())
       return null;
 
-    return word.toString().toLowerCase(Locale.ROOT);
+    String finalWord = word.toString().toLowerCase(Locale.ROOT);
+    if (finalWord.length() < letters.length())
+      return null;
+
+    return finalWord;
   }
 
   private static boolean isAdjacentFree(Direction moveDirection, Position position,
