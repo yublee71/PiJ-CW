@@ -107,8 +107,13 @@ public class GameUI {
       System.out.print("OPEN GAME: ");
       players[otherPlayerIndex].showRack();
     }
-    System.out.println("It's your turn, " + playerName(currentPlayerIndex) + "! Your tiles:");
-    players[currentPlayerIndex].showRack();
+    System.out.print("It's your turn, " + playerName(currentPlayerIndex) + "!");
+    if (players[currentPlayerIndex].isHuman()) {
+      System.out.println(" Your tiles:");
+      players[currentPlayerIndex].showRack();
+    } else {
+      System.out.println();
+    }
   }
 
   public static void showError_IllegalMoveFormat() {

@@ -49,9 +49,15 @@ public class Game {
 
     GameUI.showRack(isOpenGame, players, currentPlayerIndex);
 
+    if (players[currentPlayerIndex].isHuman())
+      humanPlayerTurn();
+    else
+      computerPlayerTurn();
+  }
+
+  private void humanPlayerTurn() {
     while (true) {
       Move move = MoveParser.parse(GameUI.promptMove());
-
       if (move == null) {
         GameUI.showError_IllegalMoveFormat();
         continue;
@@ -62,7 +68,6 @@ public class Game {
       if (numOfPlaceMoveMade == 0) {
         move.setIsFirstMove(true);
       }
-
       if (MoveValidator.isMoveValid(move, players[currentPlayerIndex], board, dictionary)) {
         handleMove(move);
         break;
@@ -70,6 +75,15 @@ public class Game {
         GameUI.showError_InvalidMove(move);
       }
     }
+  }
+
+  private void computerPlayerTurn() {
+    Move move = Move.pass();
+    GameUI.showMove(move);
+    if (numOfPlaceMoveMade == 0) {
+      move.setIsFirstMove(true);
+    }
+    handleMove(move);
   }
 
 

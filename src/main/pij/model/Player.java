@@ -12,7 +12,7 @@ public class Player {
   public static final int MAX_RACK_SIZE = 7;
   private final List<Tile> rack = new ArrayList<>();
   private int score;
-  private boolean isHuman;
+  private final boolean isHuman;
 
   public Player(boolean isHuman, TileBag tileBag) {
     //TODO: tileBag null check
@@ -21,7 +21,7 @@ public class Player {
       //TODO: check if it is possible to add
       rack.add(tileBag.drawTile());
     }
-    this.isHuman = true; //TODO: reflect argument value
+    this.isHuman = isHuman;
   }
 
   public int getScore() {
