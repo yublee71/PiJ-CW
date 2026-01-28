@@ -70,4 +70,8 @@ public class Tile {
   public int getValue() {
     return value;
   }
+
+  public boolean isWildcard() {
+    return isWildcard;
+  }
 }

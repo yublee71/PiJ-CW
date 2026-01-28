@@ -46,13 +46,14 @@ public class Player {
     return rack;
   }
 
-  public Tile removeTileFromRack(char c) {
+  public Tile removeTileFromRack(char charToRemove) {
     for (int i = 0; i < rack.size(); i++) {
-      if (c >= 'a' && c <= 'z' && rack.get(i).getLetter() == '_') {
-        rack.get(i).setChosenLetter(c);
+      Tile tile = rack.get(i);
+      if (charToRemove >= 'a' && charToRemove <= 'z' && tile.isWildcard()) {
+        tile.setChosenLetter(charToRemove);
         return rack.remove(i);
       }
-      if (c == rack.get(i).getLetter()) {
+      if (charToRemove == tile.getLetter()) {
         return rack.remove(i);
       }
     }

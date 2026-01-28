@@ -48,8 +48,8 @@ public class MoveExecutor {
           tileGrid[position.row()][position.col()] = tile;
           player.addTileToRack(tileBag.drawTile());
         }),
-        move.getLetters().length());
+        letters.length());
 
-    player.addScore(score[0] * premiumWordFactor[0] + (move.getLetters().length() == 7 ? 60 : 0));
+    player.addScore(score[0] * premiumWordFactor[0] + (letters.length() == 7 ? 60 : 0));
   }
 }
