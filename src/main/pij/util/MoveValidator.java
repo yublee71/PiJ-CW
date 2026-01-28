@@ -71,9 +71,10 @@ public class MoveValidator {
     }
 
     String word = buildWord(move, board);
+    //TODO: remove
     System.out.println(word);
-    return word != null && (word.length() > move.getLetters().length() || move.isFirstMove());
-//        && dictionary.contains(word);
+    return word != null && (word.length() > move.getLetters().length() || move.isFirstMove())
+        && dictionary.contains(word);
   }
 
   private static boolean isMoveStartPositionValid(Board board, Position moveStart) {

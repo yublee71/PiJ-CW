@@ -5,6 +5,9 @@ import pij.util.MoveExecutor;
 import pij.util.MoveParser;
 import pij.util.MoveValidator;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  *
  *
@@ -78,12 +81,68 @@ public class Game {
   }
 
   private void computerPlayerTurn() {
-    Move move = Move.pass();
+    Player player = players[currentPlayerIndex];
+    List<Tile> rack = player.getRack();
+
+    Move move = null;
+    List<String> stringList = getAllPossibleStringsFromRack(rack);
+
+    for (String s : stringList) {
+      System.out.println(s);
+      for (int i = 0; i < board.getRows(); i++) {
+        for (int j = 0; j < board.getColumns(); j++) {
+          DirectedPosition directedPositionHorizontal
+              = new DirectedPosition(new Position(j, i), Direction.HORIZONTAL, "");
+          Move tmpMove = Move.place(s, directedPositionHorizontal);
+          if (MoveValidator.isMoveValid(tmpMove, player, board, dictionary)) {
+            move = tmpMove;
+          }
+          DirectedPosition directedPositionVertical
+              = new DirectedPosition(new Position(j, i), Direction.VERTICAL, "");
+          tmpMove = Move.place(s, directedPositionVertical);
+          if (MoveValidator.isMoveValid(tmpMove, player, board, dictionary)) {
+            move = tmpMove;
+          }
+        }
+      }
+    }
+    if (move == null) {
+      move = Move.pass();
+    }
+
     GameUI.showMove(move);
     if (numOfPlaceMoveMade == 0) {
       move.setIsFirstMove(true);
     }
     handleMove(move);
+  }
+
+  //using three tiles for now
+  private static List<String> getAllPossibleStringsFromRack(List<Tile> rack) {
+    List<String> stringList = new ArrayList<>();
+
+    int added = 0;
+    for (int i = 0; i < rack.size() && added < 3; i++) {
+      Tile tile = rack.get(i);
+      if (!tile.isWildcard()) {
+        stringList.add("" + tile.getLetter());
+        added++;
+      }
+    }
+
+    stringList.add(stringList.get(0) + stringList.get(1));
+    stringList.add(stringList.get(0) + stringList.get(2));
+    stringList.add(stringList.get(1) + stringList.get(0));
+    stringList.add(stringList.get(1) + stringList.get(2));
+    stringList.add(stringList.get(2) + stringList.get(0));
+    stringList.add(stringList.get(2) + stringList.get(1));
+    stringList.add(stringList.get(0) + stringList.get(1) + stringList.get(2));
+    stringList.add(stringList.get(0) + stringList.get(2) + stringList.get(1));
+    stringList.add(stringList.get(1) + stringList.get(0) + stringList.get(2));
+    stringList.add(stringList.get(1) + stringList.get(2) + stringList.get(0));
+    stringList.add(stringList.get(2) + stringList.get(0) + stringList.get(1));
+    stringList.add(stringList.get(2) + stringList.get(1) + stringList.get(0));
+    return stringList;
   }
 
 
