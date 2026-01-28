@@ -33,11 +33,12 @@ public class MoveValidator {
     }
 
     List<Tile> rackCopy = new ArrayList<>(rack);
-    for (char c : letters.toCharArray()) {
+    for (char letter : letters.toCharArray()) {
       boolean found = false;
       for (int i = 0; i < rackCopy.size(); i++) {
-        char r = rackCopy.get(i).getLetter();
-        if ((c >= 'a' && c <= 'z' && r == '_') || c == r) {
+        Tile tileInRack = rackCopy.get(i);
+        if ((letter >= 'a' && letter <= 'z' && tileInRack.isWildcard())
+            || letter == tileInRack.getLetter()) {
           found = true;
           rackCopy.remove(i);
           break;

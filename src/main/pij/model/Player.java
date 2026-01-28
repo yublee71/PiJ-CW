@@ -49,11 +49,8 @@ public class Player {
   public Tile removeTileFromRack(char charToRemove) {
     for (int i = 0; i < rack.size(); i++) {
       Tile tile = rack.get(i);
-      if (charToRemove >= 'a' && charToRemove <= 'z' && tile.isWildcard()) {
-        tile.setChosenLetter(charToRemove);
-        return rack.remove(i);
-      }
-      if (charToRemove == tile.getLetter()) {
+      if (charToRemove >= 'a' && charToRemove <= 'z' && tile.isWildcard()
+          || charToRemove == tile.getLetter()) {
         return rack.remove(i);
       }
     }

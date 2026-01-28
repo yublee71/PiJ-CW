@@ -64,6 +64,9 @@ public class Tile {
   }
 
   public char getLetter() {
+    if (isWildcard && chosenLetter != null) {
+      return chosenLetter;
+    }
     return letter;
   }
 

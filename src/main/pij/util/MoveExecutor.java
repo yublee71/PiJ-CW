@@ -36,6 +36,9 @@ public class MoveExecutor {
           int squareValue = square.getValue();
           SquareType squareType = square.getType();
           Tile tile = player.removeTileFromRack(letters.charAt(i));
+          if (tile.isWildcard()) {
+            tile.setChosenLetter(letters.charAt(i));
+          }
           int tileValue = tile.getValue();
           int premiumLetterFactor = 1;
 
