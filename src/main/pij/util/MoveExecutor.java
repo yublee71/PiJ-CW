@@ -9,81 +9,47 @@ import pij.model.*;
  */
 public class MoveExecutor {
   //TODO: handle the very first move
-  public static void applyMove(Move move, Board board, Player[] players, int currentPlayer, TileBag tileBag) {
-    if (move.getDirectedPosition() == null && move.getLetters() == null) {
+  public static void applyMove(Move move, Board board, Player player, TileBag tileBag) {
+    if (move.getMoveType() == MoveType.PASS) {
       return;
     }
 
-    Direction moveDirection = move.getDirectedPosition().getDirection();
-    Position moveStartPosition = move.getDirectedPosition().getStartPosition();
-    String letters = move.getLetters();
-    int lettersLength = move.getLetters().length();
+    int[] score = {0};
+    int[] premiumWordFactor = {1};
     Tile[][] tileGrid = board.getTileGrid();
     Square[][] squareGrid = board.getSquareGrid();
+    String letters = move.getLetters();
 
-    int col = moveStartPosition.col();
-    int row = moveStartPosition.row();
-    int j = 0;
-    int premiumWordFactor = 1;
-    int premiumLetterFactor = 1;
-    int score = 0;
-    Square currentSquare;
+    BoardIterator.iterateBackwards(move.getMoveStartPosition(),
+        move.getMoveDirection(),
+        board,
+        (tile) -> {
+          score[0] += (tile.getValue());
+        });
 
-    Tile currentTile;
-    int i = 1;
-    while ((moveDirection == Direction.HORIZONTAL && col - i < board.getColumns()) && col - i >= 0 ||
-        (moveDirection == Direction.VERTICAL && row - i < board.getRows() && row - i >= 0)) {
-      if (moveDirection == Direction.HORIZONTAL)
-        currentTile = tileGrid[row][col - i];
-      else {
-        currentTile = tileGrid[row - i][col];
-      }
-      if (currentTile != null) {
-        score += currentTile.getValue();
-      } else {
-        break;
-      }
-      i++;
-    }
+    BoardIterator.iterateForward(move.getMoveStartPosition(), move.getMoveDirection(), board,
+        (tile) -> {
+          score[0] += (tile.getValue());
+        },
+        ((position, i) -> {
+          Square square = squareGrid[position.row()][position.col()];
+          int squareValue = square.getValue();
+          SquareType squareType = square.getType();
+          Tile tile = player.removeTileFromRack(letters.charAt(i));
+          int tileValue = tile.getValue();
+          int premiumLetterFactor = 1;
 
+          if (squareType == SquareType.WORD_PREMIUM) {
+            premiumWordFactor[0] *= squareValue;
+          } else if (squareType == SquareType.LETTER_PREMIUM) {
+            premiumLetterFactor = squareValue;
+          }
+          score[0] += tileValue * premiumLetterFactor;
+          tileGrid[position.row()][position.col()] = tile;
+          player.addTileToRack(tileBag.drawTile());
+        }),
+        move.getLetters().length());
 
-    while (j < lettersLength && col < board.getColumns() && row < board.getRows()) {
-      if (tileGrid[row][col] == null) {
-        tileGrid[row][col] = players[currentPlayer].removeTileFromRack(letters.charAt(j));
-        players[currentPlayer].addTileToRack(tileBag.drawTile());
-        currentSquare = squareGrid[row][col];
-        if (currentSquare.getType() == SquareType.WORD_PREMIUM) {
-          premiumWordFactor *= currentSquare.getValue();
-        } else if (currentSquare.getType() == SquareType.LETTER_PREMIUM) {
-          premiumLetterFactor = currentSquare.getValue();
-        } else {
-          premiumLetterFactor = 1;
-        }
-        j++;
-      }
-      score += tileGrid[row][col].getValue() * premiumLetterFactor;
-      if (moveDirection == Direction.HORIZONTAL) {
-        col++;
-      } else {
-        row++;
-      }
-    }
-
-    int k = 1;
-    while ((moveDirection == Direction.HORIZONTAL && col + k < board.getColumns()) && col + k >= 0 ||
-        (moveDirection == Direction.VERTICAL && row + k < board.getRows() && row + k >= 0)) {
-      if (moveDirection == Direction.HORIZONTAL)
-        currentTile = tileGrid[row][col + k];
-      else {
-        currentTile = tileGrid[row + k][col];
-      }
-      if (currentTile != null) {
-        score += currentTile.getValue();
-      } else {
-        break;
-      }
-      k++;
-    }
-    players[currentPlayer].addScore(score * premiumWordFactor + (lettersLength == 7 ? 60 : 0));
+    player.addScore(score[0] * premiumWordFactor[0] + (move.getLetters().length() == 7 ? 60 : 0));
   }
 }

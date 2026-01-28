@@ -50,12 +50,8 @@ public class MoveValidator {
     return true;
   }
 
-  private static boolean isMoveStartPositionValid(Board board, Position moveStart) {
-    return board.isPositionInBoard(moveStart)
-        && board.getTileGrid()[moveStart.row()][moveStart.col()] == null;
-  }
 
-  public static boolean isPlacementValid(Move move, Board board, Dictionary dictionary) {
+  private static boolean isPlacementValid(Move move, Board board, Dictionary dictionary) {
     Objects.requireNonNull(move, "Move cannot be null");
     Objects.requireNonNull(board, "Board cannot be null");
 
@@ -78,8 +74,8 @@ public class MoveValidator {
   }
 
   private static String buildWord(Move move, Board board) {
-    String preWord = prependExistingTiles(move, board);
-    String word = addNewTiles(move, board);
+    String preWord = prependExistingLetters(move, board);
+    String word = addNewLetters(move, board);
 
     if (word == null)
       return null;
@@ -87,73 +83,54 @@ public class MoveValidator {
     return preWord + word;
   }
 
-  private static String prependExistingTiles(Move move, Board board) {
-    Direction moveDirection = move.getDirectedPosition().getDirection();
-    int startCol = move.getMoveStartPosition().col();
-    int startRow = move.getMoveStartPosition().row();
-    Tile[][] tileGrid = board.getTileGrid();
-
+  private static String prependExistingLetters(Move move, Board board) {
     StringBuilder word = new StringBuilder();
 
-    if (moveDirection == Direction.HORIZONTAL) {
-      int col = startCol - 1;
-      while (col >= 0 && tileGrid[startRow][col] != null) {
-        word.append(tileGrid[startRow][col].getLetter());
-        col--;
-      }
-    } else {
-      int row = startRow - 1;
-      while (row >= 0 && tileGrid[row][startCol] != null) {
-        word.append(tileGrid[row][startCol].getLetter());
-        row--;
-      }
-    }
+    BoardIterator.iterateBackwards(
+        move.getMoveStartPosition(),
+        move.getMoveDirection(),
+        board,
+        (tile) -> {
+          word.append(tile.getLetter());
+        });
 
     return word.reverse().toString().toLowerCase(Locale.ROOT);
   }
 
-  private static String addNewTiles(Move move, Board board) {
-    Direction moveDirection = move.getMoveDirection();
-    int startCol = move.getMoveStartPosition().col();
-    int startRow = move.getMoveStartPosition().row();
-    String letters = move.getLetters();
-    Tile[][] tileGrid = board.getTileGrid();
-    int boardCols = board.getColumns();
-    int boardRows = board.getRows();
-
+  private static String addNewLetters(Move move, Board board) {
     StringBuilder word = new StringBuilder();
-    int letterIndex = 0;
+    String letters = move.getLetters();
 
-    while (startCol < boardCols && startRow < boardRows) {
-      Tile tile = tileGrid[startRow][startCol];
-      if (letterIndex >= letters.length() && tile == null) {
-        break;
-      }
+    int iterateIndex = BoardIterator.iterateForward(
+        move.getMoveStartPosition(),
+        move.getMoveDirection(),
+        board,
+        (tile) -> {
+          word.append(tile.getLetter());
+        },
+        (position, i) -> {
+          if (!isAdjacentFree(move.getMoveDirection(), position, board)) {
+            return;
+          }
+          word.append(letters.charAt(i));
+        },
+        letters.length()
+    );
 
-      if (tile == null) {
-        if (!isAdjacentFree(moveDirection, startCol, startRow, boardCols, boardRows, tileGrid)) {
-          break;
-        }
-        word.append(letters.charAt(letterIndex));
-        letterIndex++;
-      } else {
-        word.append(tile.getLetter());
-      }
-
-      if (moveDirection == Direction.HORIZONTAL)
-        startCol++;
-      else
-        startRow++;
-    }
-
-    if (letterIndex < letters.length())
+    if (iterateIndex < letters.length())
       return null;
 
     return word.toString().toLowerCase(Locale.ROOT);
   }
 
-  private static boolean isAdjacentFree(Direction moveDirection, int col, int row,
-                                        int boardCols, int boardRows, Tile[][] tileGrid) {
+  private static boolean isAdjacentFree(Direction moveDirection, Position position,
+                                        Board board) {
+    int row = position.row();
+    int col = position.col();
+    int boardRows = board.getRows();
+    int boardCols = board.getColumns();
+    Tile[][] tileGrid = board.getTileGrid();
+
     if (moveDirection == Direction.HORIZONTAL) {
       boolean topFree = (row - 1 < 0) || (tileGrid[row - 1][col] == null);
       boolean bottomFree = (row + 1 >= boardRows) || (tileGrid[row + 1][col] == null);
@@ -163,5 +140,10 @@ public class MoveValidator {
       boolean rightFree = (col + 1 >= boardCols) || (tileGrid[row][col + 1] == null);
       return leftFree && rightFree;
     }
+  }
+
+  private static boolean isMoveStartPositionValid(Board board, Position moveStart) {
+    return board.isPositionInBoard(moveStart)
+        && board.getTileGrid()[moveStart.row()][moveStart.col()] == null;
   }
 }

@@ -77,7 +77,7 @@ public class Game {
     if (move.getMoveType() == MoveType.PASS) {
       numOfConsecutivePass++;
     } else {
-      MoveExecutor.applyMove(move, board, players, currentPlayerIndex, tileBag);
+      MoveExecutor.applyMove(move, board, players[currentPlayerIndex], tileBag);
       numOfConsecutivePass = 0;
       numOfPlaceMoveMade++;
       GameUI.showScore(updateScoreBoard());
