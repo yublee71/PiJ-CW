@@ -66,10 +66,34 @@ public class MoveValidator {
       return false;
     }
 
+    if (move.isFirstMove() && !isBoardStartPositionIncluded(move, board.getStartPosition())) {
+      return false;
+    }
+
     String word = buildWord(move, board);
     System.out.println(word);
     return word != null && (word.length() > move.getLetters().length() || move.isFirstMove());
 //        && dictionary.contains(word);
+  }
+
+  private static boolean isMoveStartPositionValid(Board board, Position moveStart) {
+    return board.isPositionInBoard(moveStart)
+        && board.getTileGrid()[moveStart.row()][moveStart.col()] == null;
+  }
+
+  private static boolean isBoardStartPositionIncluded(Move move, Position startPosition) {
+    int moveStartCol = move.getMoveStartPosition().col();
+    int moveStartRow = move.getMoveStartPosition().row();
+    int moveLength = move.getLetters().length();
+    Direction moveDirection = move.getMoveDirection();
+
+    if (moveDirection == Direction.HORIZONTAL) {
+      return startPosition.col() >= moveStartCol &&
+          startPosition.col() < moveStartCol + moveLength;
+    } else {
+      return startPosition.row() >= moveStartRow &&
+          startPosition.row() < moveStartRow + moveLength;
+    }
   }
 
   private static String buildWord(Move move, Board board) {
@@ -144,10 +168,5 @@ public class MoveValidator {
       boolean rightFree = (col + 1 >= boardCols) || (tileGrid[row][col + 1] == null);
       return leftFree && rightFree;
     }
-  }
-
-  private static boolean isMoveStartPositionValid(Board board, Position moveStart) {
-    return board.isPositionInBoard(moveStart)
-        && board.getTileGrid()[moveStart.row()][moveStart.col()] == null;
   }
 }
