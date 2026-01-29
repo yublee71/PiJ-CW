@@ -178,7 +178,8 @@ public class Game {
   }
 
   private boolean isGameOver() {
-    return numOfConsecutivePass >= 4 || tileBag.size() == 0;
+    return numOfConsecutivePass >= 4 ||
+        (tileBag.size() == 0 && (players[0].getRack().isEmpty() || players[1].getRack().isEmpty()));
   }
 
   private int[] updateScoreBoard() {
