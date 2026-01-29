@@ -1,7 +1,9 @@
 package pij.model;
 
 /**
- *
+ * Represents a board in the scrabble game.
+ * The board consists of grid of {@code Square}s and {@code Tile}s
+ * with a designated start {@code position}.
  *
  * @author Yubeen Lee
  */
@@ -18,12 +20,15 @@ public class Board {
   private final Position startPosition;
 
   /**
+   * Constructs a {@code Board} with the given number of columns and rows, and the start position.
    *
-   * @param columns
-   * @param rows
-   * @param startPosition
+   * @param columns       the number of columns on the board (MIN_COLUMNS~MAX_COLUMNS)
+   * @param rows          the number of rows on the board (MIN_ROWS~MAX_ROWS)
+   * @param startPosition the start position of the board
    * @throws IllegalArgumentException if {@code columns} or {@code rows} is out of bounds
-   *                                  or if {@code startPosition) is invalid
+   *                                  or if the size ({@code colunms} * {@code rows})
+   *                                  is out of bounds (< MIN_SIZE)
+   *                                  or if {@code startPosition) is null or out of bounds
    */
   public Board(int columns, int rows, Position startPosition) {
     if (columns < MIN_COLUMNS || columns > MAX_COLUMNS) {
@@ -47,7 +52,6 @@ public class Board {
     if (startPosition == null) {
       throw new IllegalArgumentException("Start position cannot be null.");
     }
-
     if (!isPositionInBoard(startPosition)) {
       throw new IllegalArgumentException("Invalid start position: " + startPosition);
     }
