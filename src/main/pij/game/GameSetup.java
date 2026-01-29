@@ -34,7 +34,7 @@ public class GameSetup {
           board = BoardLoader.loadBoard(boardFilePath);
           break;
         } catch (IllegalArgumentException e) {
-          System.out.print(GameUI.ERR_MSG_INVALID_FILE);
+          GameUI.showError_InvalidFile();
         }
       }
     }
