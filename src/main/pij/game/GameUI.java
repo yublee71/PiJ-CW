@@ -10,14 +10,10 @@ import java.util.Scanner;
  * @author Yubeen Lee
  */
 public class GameUI {
-  private static final String RESET = "\u001B[0m";
-  private static final String BLUE = "\u001B[34m";
-  private static final String PINK = "\u001B[95m";
-
   private static final Scanner SCANNER = new Scanner(System.in);
 
-  private static final String PLAYER1_NAME = BLUE + "Player 1" + RESET;
-  private static final String PLAYER2_NAME = PINK + "Player 2" + RESET;
+  private static final String PLAYER1_NAME = "Player 1";
+  private static final String PLAYER2_NAME = "Player 2";
 
   public static void showGameBanner() {
     System.out.println("""
