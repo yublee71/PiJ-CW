@@ -6,6 +6,7 @@ import pij.util.MoveParser;
 import pij.util.MoveValidator;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -88,20 +89,26 @@ public class Game {
     List<String> stringList = getAllPossibleStringsFromRack(rack);
 
     for (String s : stringList) {
-      System.out.println(s);
-      for (int i = 0; i < board.getRows(); i++) {
+      if (move != null)
+        break;
+      for (int i = board.getRows() - 1; i >= 0 && move == null; i--) {
         for (int j = 0; j < board.getColumns(); j++) {
-          DirectedPosition directedPositionHorizontal
-              = new DirectedPosition(new Position(j, i), Direction.HORIZONTAL, "");
-          Move tmpMove = Move.place(s, directedPositionHorizontal);
-          if (MoveValidator.isMoveValid(tmpMove, player, board, dictionary)) {
-            move = tmpMove;
+          Position position = new Position(j, i);
+          char col = (char) ('a' + j);
+          String row = Integer.toString((i + 1));
+          Move tmpMoveHorizontal = Move.place(s, new DirectedPosition(position, Direction.HORIZONTAL, row + col));
+          Move tmpMoveVertical = Move.place(s, new DirectedPosition(position, Direction.VERTICAL, col + row));
+          if (numOfPlaceMoveMade == 0) {
+            tmpMoveHorizontal.setIsFirstMove(true);
+            tmpMoveVertical.setIsFirstMove(true);
           }
-          DirectedPosition directedPositionVertical
-              = new DirectedPosition(new Position(j, i), Direction.VERTICAL, "");
-          tmpMove = Move.place(s, directedPositionVertical);
-          if (MoveValidator.isMoveValid(tmpMove, player, board, dictionary)) {
-            move = tmpMove;
+          if (MoveValidator.isMoveValid(tmpMoveHorizontal, player, board, dictionary)) {
+            move = tmpMoveHorizontal;
+            break;
+          }
+          if (MoveValidator.isMoveValid(tmpMoveVertical, player, board, dictionary)) {
+            move = tmpMoveVertical;
+            break;
           }
         }
       }
@@ -111,38 +118,46 @@ public class Game {
     }
 
     GameUI.showMove(move);
-    if (numOfPlaceMoveMade == 0) {
-      move.setIsFirstMove(true);
-    }
     handleMove(move);
   }
 
-  //using three tiles for now
-  private static List<String> getAllPossibleStringsFromRack(List<Tile> rack) {
-    List<String> stringList = new ArrayList<>();
+  public static List<String> getAllPossibleStringsFromRack(List<Tile> rack) {
+    List<Character> letters = new ArrayList<>();
 
-    int added = 0;
-    for (int i = 0; i < rack.size() && added < 3; i++) {
-      Tile tile = rack.get(i);
+    for (Tile tile : rack) {
       if (!tile.isWildcard()) {
-        stringList.add("" + tile.getLetter());
-        added++;
+        letters.add(tile.getLetter());
       }
     }
 
-    stringList.add(stringList.get(0) + stringList.get(1));
-    stringList.add(stringList.get(0) + stringList.get(2));
-    stringList.add(stringList.get(1) + stringList.get(0));
-    stringList.add(stringList.get(1) + stringList.get(2));
-    stringList.add(stringList.get(2) + stringList.get(0));
-    stringList.add(stringList.get(2) + stringList.get(1));
-    stringList.add(stringList.get(0) + stringList.get(1) + stringList.get(2));
-    stringList.add(stringList.get(0) + stringList.get(2) + stringList.get(1));
-    stringList.add(stringList.get(1) + stringList.get(0) + stringList.get(2));
-    stringList.add(stringList.get(1) + stringList.get(2) + stringList.get(0));
-    stringList.add(stringList.get(2) + stringList.get(0) + stringList.get(1));
-    stringList.add(stringList.get(2) + stringList.get(1) + stringList.get(0));
-    return stringList;
+    int size = letters.size();
+    char[] sequence = new char[size];
+    boolean[] visited = new boolean[size];
+
+    List<String> result = new ArrayList<>();
+
+    for (int len = 1; len <= size; len++) {
+      dfs(0, len, letters, sequence, visited, result);
+    }
+
+    Collections.reverse(result);
+    return result;
+  }
+
+  private static void dfs(int depth, int len, List<Character> letters, char[] sequence,
+                          boolean[] visited, List<String> result) {
+    if (depth == len) {
+      result.add(new String(sequence, 0, len));
+      return;
+    }
+    for (int i = 0; i < letters.size(); i++) {
+      if (!visited[i]) {
+        visited[i] = true;
+        sequence[depth] = letters.get(i);
+        dfs(depth + 1, len, letters, sequence, visited, result);
+        visited[i] = false;
+      }
+    }
   }
 
 
