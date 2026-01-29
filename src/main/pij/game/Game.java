@@ -127,6 +127,8 @@ public class Game {
     for (Tile tile : rack) {
       if (!tile.isWildcard()) {
         letters.add(tile.getLetter());
+      } else {
+        letters.add('s');//computer player always uses the wildcard tile as 's' for simplification
       }
     }
 
