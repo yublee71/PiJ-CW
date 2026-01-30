@@ -11,11 +11,21 @@ import java.nio.file.Path;
 import java.util.List;
 
 /**
- *
+ * Utility class for loading a scrabble board from a file.
  *
  * @author Yubeen Lee
  */
 public class BoardLoader {
+  private static final String INVALID_BOARD_CONFIG = "Invalid board configuration: ";
+
+  /**
+   * Loads a {@code Board} from the given file path.
+   *
+   * @param filePath the path to the board file
+   * @return a {@code Board}
+   * @throws IllegalArgumentException if the file cannot be loaded or
+   *                                  if the board configuration is invalid.
+   */
   public static Board loadBoard(Path filePath) {
     List<String> lines;
 
@@ -35,16 +45,16 @@ public class BoardLoader {
       columns = Integer.parseInt(lines.get(0));
       rows = Integer.parseInt(lines.get(1));
     } catch (NumberFormatException e) {
-      throw new IllegalArgumentException("Invalid board configuration.");
+      throw new IllegalArgumentException(INVALID_BOARD_CONFIG + "invalid column and/or row count.");
     }
 
     if (lines.size() != rows + 3) {
-      throw new IllegalArgumentException("Invalid board configuration. Rows do not match line count.");
+      throw new IllegalArgumentException(INVALID_BOARD_CONFIG + "Rows do not match line count.");
     }
 
     Position startPosition = Position.stringToPosition(lines.get(2));
     if (startPosition == null) {
-      throw new IllegalArgumentException("Invalid board configuration. Start position is invalid.");
+      throw new IllegalArgumentException(INVALID_BOARD_CONFIG + "Start position is invalid.");
     }
 
     Board board = new Board(columns, rows, startPosition);
@@ -71,34 +81,34 @@ public class BoardLoader {
       } else if (c == '[') {
         end = line.indexOf(']', i + 1);
         if (end == -1) {
-          throw new IllegalArgumentException("Invalid board configuration: missing closing bracket ']'");
+          throw new IllegalArgumentException(INVALID_BOARD_CONFIG + "missing closing bracket ']'");
         }
         try {
           value = Integer.parseInt(line.substring(i + 1, end));
         } catch (NumberFormatException e) {
-          throw new IllegalArgumentException("Invalid board configuration: invalid square value.");
+          throw new IllegalArgumentException(INVALID_BOARD_CONFIG + "invalid square value.");
         }
         board.putSquare(colIndex, rowIndex, new Square(value, SquareType.LETTER_PREMIUM));
         i = end + 1;
       } else if (c == '<') {
         end = line.indexOf('>', i + 1);
         if (end == -1) {
-          throw new IllegalArgumentException("Invalid board configuration: missing closing bracket '>'");
+          throw new IllegalArgumentException(INVALID_BOARD_CONFIG + "missing closing bracket '>'");
         }
         try {
           value = Integer.parseInt(line.substring(i + 1, end));
         } catch (NumberFormatException e) {
-          throw new IllegalArgumentException("Invalid board configuration: invalid square value.");
+          throw new IllegalArgumentException(INVALID_BOARD_CONFIG + "invalid square value.");
         }
         board.putSquare(colIndex, rowIndex, new Square(value, SquareType.WORD_PREMIUM));
         i = end + 1;
       } else {
-        throw new IllegalArgumentException("Invalid board configuration: invalid square format.");
+        throw new IllegalArgumentException(INVALID_BOARD_CONFIG + "invalid square format.");
       }
       colIndex++;
     }
     if (i != line.length() || colIndex != columns) {
-      throw new IllegalArgumentException("Invalid board configuration: line length does not match column count.");
+      throw new IllegalArgumentException(INVALID_BOARD_CONFIG + "line length does not match column count.");
     }
   }
 }

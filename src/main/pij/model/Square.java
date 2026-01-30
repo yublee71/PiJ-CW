@@ -1,33 +1,21 @@
 package pij.model;
 
 /**
- *
+ * Represents a square on the board.
  *
  * @author Yubeen Lee
  */
-public class Square {
+public record Square(int value, SquareType type) {
   public static final int MIN_VALUE = -9;
   public static final int MAX_VALUE = 99;
-  private final int value;
-  private final SquareType type;
 
-  public Square(int value, SquareType type) {
+  public Square {
     if (value < MIN_VALUE || value > MAX_VALUE) {
       throw new IllegalArgumentException("Invalid square value: " + value);
     }
     if (type == null) {
       throw new IllegalArgumentException("Square type cannot be null.");
     }
-    this.value = value;
-    this.type = type;
-  }
-
-  public SquareType getType() {
-    return type;
-  }
-
-  public int getValue() {
-    return value;
   }
 
   @Override

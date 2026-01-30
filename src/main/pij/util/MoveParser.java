@@ -13,6 +13,7 @@ public class MoveParser {
    * Parses a string representation of a move to new {@code Move}.
    * Expected format: word,square
    * (e.g. "HI,f4" for a downward move and "HI,4f" for a rightward move)
+   * Any whitespace in the input string is not tolerated and will make the format invalid.
    * If both the word and position are empty (","), returns a pass move.
    * Otherwise, returns a place move.
    *

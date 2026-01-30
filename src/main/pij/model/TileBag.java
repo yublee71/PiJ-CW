@@ -6,7 +6,10 @@ import java.util.List;
 import java.util.Map;
 
 /**
- *
+ * Represents a bag of tiles used in the scrabble game.
+ * It is initialised with the tiles, each with a specific value and quantity,
+ * and is shuffled after creation.
+ * Tiles can be drawn one by one until the bag is empty.
  *
  * @author Yubeen Lee
  */

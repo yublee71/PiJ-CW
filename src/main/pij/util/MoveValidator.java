@@ -7,7 +7,8 @@ import java.util.List;
 import java.util.Locale;
 
 /**
- *
+ * Validates the given move for the given player, board, and dictionary.
+ * Pass moves are always valid.
  *
  * @author Yubeen Lee
  */
@@ -52,7 +53,7 @@ public class MoveValidator {
       return false;
     }
 
-    if (move.isFirstMove() && !isBoardStartPositionIncluded(move, board.getStartPosition())) {
+    if (move.isFirstMove() && !isBoardStartPositionIncludedInMove(move, board.getStartPosition())) {
       return false;
     }
 
@@ -66,7 +67,7 @@ public class MoveValidator {
         && board.getTileGrid()[moveStart.row()][moveStart.col()] == null;
   }
 
-  private static boolean isBoardStartPositionIncluded(Move move, Position startPosition) {
+  private static boolean isBoardStartPositionIncludedInMove(Move move, Position startPosition) {
     int moveStartCol = move.getMoveStartPosition().col();
     int moveStartRow = move.getMoveStartPosition().row();
     int moveLength = move.getLetters().length();

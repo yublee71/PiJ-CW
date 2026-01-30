@@ -1,7 +1,7 @@
 package pij.model;
 
 /**
- *
+ * Represents a move made by a player.
  *
  * @author Yubeen Lee
  */
@@ -26,13 +26,6 @@ public class Move {
     return new Move(MoveType.PASS, null, null);
   }
 
-  @Override
-  public String toString() {
-    if (moveType == MoveType.PASS)
-      return "Pass Move!";
-    return "Letters: " + letters + " at position " + directedPosition;
-  }
-
   public String getLetters() {
     return letters;
   }
@@ -49,15 +42,22 @@ public class Move {
     return directedPosition.getDirection();
   }
 
-  public void setIsFirstMove(boolean isFirstMove) {
-    this.isFirstMove = isFirstMove;
+  public MoveType getMoveType() {
+    return moveType;
   }
 
   public boolean isFirstMove() {
     return isFirstMove;
   }
 
-  public MoveType getMoveType() {
-    return moveType;
+  public void setIsFirstMove(boolean isFirstMove) {
+    this.isFirstMove = isFirstMove;
+  }
+
+  @Override
+  public String toString() {
+    if (moveType == MoveType.PASS)
+      return "Pass Move!";
+    return "Letters: " + letters + " at position " + directedPosition;
   }
 }

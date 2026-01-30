@@ -18,7 +18,7 @@ import java.util.Set;
 public class DictionaryLoader {
   /**
    * Loads a dictionary from the given file path.
-   * Each line represents a word and is converted to a lower case.
+   * Each line represents a word and is converted to lowercase.
    *
    * @param filePath the path to the dictionary file
    * @return a {@code Dictionary}

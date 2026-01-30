@@ -6,6 +6,11 @@ import java.util.Scanner;
 
 /**
  *
+ * Handles all user interaction for the game.
+ * It includes displaying game banner, board, players' racks, scores, and error messages.
+ * It also manages user input for selecting
+ * the type of board (default/custom), players (human/computer), and game mode (open/close).
+ * All input is read from {@link Scanner} and output is printed to the console.
  *
  * @author Yubeen Lee
  */
@@ -83,15 +88,6 @@ public class GameUI {
     System.out.println("Start position: " + board.getStartPosition());
   }
 
-  private static void printColumnIndex(int columns) {
-    System.out.println();
-    System.out.print("   ");
-    for (int col = 0; col < columns; col++) {
-      System.out.print(" " + (char) ('a' + col) + " ");
-    }
-    System.out.println();
-    System.out.println();
-  }
 
   public static void showRack(boolean isOpenGame, Player[] players, int currentPlayerIndex) {
     int otherPlayerIndex = 1 - currentPlayerIndex;
@@ -148,11 +144,6 @@ public class GameUI {
     }
   }
 
-  private static String playerName(int playerIndex) {
-    return (playerIndex == 0 ? PLAYER1_NAME : PLAYER2_NAME);
-  }
-
-
   private static char promptToSelectOption(String optionMessage, char option1, char option2) {
     String userChoice;
 
@@ -166,5 +157,19 @@ public class GameUI {
       } else
         return userChoice.charAt(0);
     }
+  }
+
+  private static void printColumnIndex(int columns) {
+    System.out.println();
+    System.out.print("   ");
+    for (int col = 0; col < columns; col++) {
+      System.out.print(" " + (char) ('a' + col) + " ");
+    }
+    System.out.println();
+    System.out.println();
+  }
+
+  private static String playerName(int playerIndex) {
+    return (playerIndex == 0 ? PLAYER1_NAME : PLAYER2_NAME);
   }
 }

@@ -2,8 +2,8 @@ package pij.model;
 
 /**
  * Represents a board in the scrabble game.
- * The board consists of grid of {@code Square}s and {@code Tile}s
- * with a designated start {@code position}.
+ * The board consists of grid of {@link Square}s and {@link Tile}s
+ * with a designated start {@link Position}.
  *
  * @author Yubeen Lee
  */
@@ -63,6 +63,22 @@ public class Board {
     return startPosition;
   }
 
+  public int getColumns() {
+    return columns;
+  }
+
+  public int getRows() {
+    return rows;
+  }
+
+  public Tile[][] getTileGrid() {
+    return tileGrid;
+  }
+
+  public Square[][] getSquareGrid() {
+    return squareGrid;
+  }
+
   public boolean isPositionInBoard(Position position) {
     return position.col() >= 0 && position.col() < columns &&
         position.row() >= 0 && position.row() < rows;
@@ -101,21 +117,5 @@ public class Board {
         }
       }
     }
-  }
-
-  public int getColumns() {
-    return columns;
-  }
-
-  public int getRows() {
-    return rows;
-  }
-
-  public Tile[][] getTileGrid() {
-    return tileGrid;
-  }
-
-  public Square[][] getSquareGrid() {
-    return squareGrid;
   }
 }

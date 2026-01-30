@@ -1,7 +1,7 @@
 package pij.model;
 
 /**
- *
+ * Represents the type of square on the board.
  *
  * @author Yubeen Lee
  */

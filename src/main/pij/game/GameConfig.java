@@ -1,7 +1,8 @@
 package pij.game;
 
 /**
- *
+ * Stores configuration constants for the game,
+ * such as the resource folder name and file names.
  *
  * @author Yubeen Lee
  */

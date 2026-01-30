@@ -11,11 +11,22 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 /**
- *
+ * Handles the creation of new {@link Game} instance.
  *
  * @author Yubeen Lee
  */
 public class GameSetup {
+  /**
+   * Creates a fully initialised game instance.
+   * Sets up the board, players, and game mode based on user selection
+   * and creates the tile bag and dictionary.
+   * If loading a custom board fails, the user is repeatedly prompted to provide a valid file name.
+   * If loading the default board fails, an exception is thrown from {@link BoardLoader},
+   * and no retry is possible.
+   * If loading the dictionary fails, an exception is thrown from {@link DictionaryLoader}.
+   *
+   * @return a new {@link Game} ready to be run
+   */
   public static Game create() {
     Board board;
 

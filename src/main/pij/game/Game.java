@@ -10,7 +10,8 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- *
+ * Manages the overall game flow of the scrabble game.
+ * It controls turn progression, move execution, score tracking, and game termination conditions.
  *
  * @author Yubeen Lee
  */
@@ -160,7 +161,6 @@ public class Game {
       }
     }
   }
-
 
   private void handleMove(Move move) {
     if (move.getMoveType() == MoveType.PASS) {

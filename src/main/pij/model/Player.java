@@ -4,7 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- *
+ * Represents a player in the scrabble game
+ * A player has a rack of tiles, a score, and can be either a human or computer-controlled.
  *
  * @author Yubeen Lee
  */
@@ -14,6 +15,13 @@ public class Player {
   private int score;
   private final boolean isHuman;
 
+  /**
+   * Creates a new player with an initial rack of MAX_RACK_SIZE tiles drawn from the given tile bag.
+   *
+   * @param isHuman true if the player is human, false if computer-controlled
+   * @param tileBag the tile bag to draw tiles from
+   * @throws IllegalStateException if the tile bag is null
+   */
   public Player(boolean isHuman, TileBag tileBag) {
     if (tileBag == null) {
       throw new IllegalStateException("Cannot create a player when the tile bag is null");
@@ -33,6 +41,10 @@ public class Player {
     return score;
   }
 
+  public List<Tile> getRack() {
+    return rack;
+  }
+
   public boolean isHuman() {
     return isHuman;
   }
@@ -45,10 +57,6 @@ public class Player {
       }
     }
     System.out.println();
-  }
-
-  public List<Tile> getRack() {
-    return rack;
   }
 
   public Tile removeTileFromRack(char charToRemove) {

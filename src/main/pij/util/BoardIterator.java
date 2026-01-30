@@ -6,11 +6,23 @@ import pij.model.Position;
 import pij.model.Tile;
 
 /**
- *
+ * Utility class for iterating over the tile grid on the board in a specified direction.
+ * Supports separate handling for existing tiles and empty positions
+ * using {@link ExistingTileHandler} and {@link EmptyTileHandler}.
  *
  * @author Yubeen Lee
  */
 public class BoardIterator {
+  /**
+   * Iterates backwards from the given position along the specified direction,
+   * applying the {@code ExistingTileHandler} to each tile encountered until the board edge
+   * or an empty square is reached.
+   *
+   * @param position  the starting position
+   * @param direction the direction to iterate (HORIZONTAL or VERTICAL)
+   * @param board     the board to iterate over
+   * @param handler   handler for existing tiles
+   */
   public static void iterateBackwards(Position position, Direction direction,
                                       Board board, ExistingTileHandler handler) {
     int startCol = position.col();
@@ -32,6 +44,21 @@ public class BoardIterator {
     }
   }
 
+  /**
+   * Iterates forward from the given position along the specified direction,
+   * applying {@code existingTileHandler} to existing tiles and
+   * {@code emptyTileHandler} to empty positions.
+   * Iteration stops when {@code emptyTileHandler} returns {@code false}
+   * or when all the new tiles have been processed (i.e. iterateLimit has been reached).
+   *
+   * @param position            the starting position
+   * @param direction           the direction to iterate (HORIZONTAL or VERTICAL)
+   * @param board               the board to iterate over
+   * @param existingTileHandler handler for existing tiles
+   * @param emptyTileHandler    handler for empty positions
+   * @param iterateLimit        the number of new tiles to handle
+   * @return the number of new tiles that were successfully handled
+   */
   public static int iterateForward(Position position, Direction direction, Board board,
                                    ExistingTileHandler existingTileHandler,
                                    EmptyTileHandler emptyTileHandler,

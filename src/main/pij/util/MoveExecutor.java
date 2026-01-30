@@ -3,7 +3,10 @@ package pij.util;
 import pij.model.*;
 
 /**
- *
+ * Applies the given move to the board and updates the player's score and rack.
+ * The move is assumed to be valid
+ * (i.e., has passed {@link MoveValidator#isMoveValid(Move, Player, Board, Dictionary)}).
+ * Pass moves are ignored.
  *
  * @author Yubeen Lee
  */
@@ -28,8 +31,8 @@ public class MoveExecutor {
         (tile) -> score[0] += (tile.getValue()),
         ((position, i) -> {
           Square square = squareGrid[position.row()][position.col()];
-          int squareValue = square.getValue();
-          SquareType squareType = square.getType();
+          int squareValue = square.value();
+          SquareType squareType = square.type();
           Tile tile = player.removeTileFromRack(letters.charAt(i));
           if (tile.isWildcard()) {
             tile.setChosenLetter(letters.charAt(i));
