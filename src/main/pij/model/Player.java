@@ -15,11 +15,16 @@ public class Player {
   private final boolean isHuman;
 
   public Player(boolean isHuman, TileBag tileBag) {
-    //TODO: tileBag null check
+    if (tileBag == null) {
+      throw new IllegalStateException("Cannot create a player when the tile bag is null");
+    }
+
     score = 0;
     for (int i = 0; i < MAX_RACK_SIZE; i++) {
-      //TODO: check if it is possible to add
-      rack.add(tileBag.drawTile());
+      Tile tile = tileBag.drawTile();
+      if (tile != null) {
+        rack.add(tile);
+      }
     }
     this.isHuman = isHuman;
   }
