@@ -46,7 +46,6 @@ public class Game {
   }
 
   private void playOneTurn() {
-    //TODO: different display for computer player
     if (numOfConsecutivePass == 0) {
       GameUI.showBoard(board); //show board if previous move is not pass
     }
