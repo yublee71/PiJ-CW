@@ -1,11 +1,11 @@
 package pij.util;
 
 import org.junit.jupiter.api.Test;
-import pij.model.Board;
-import pij.model.DirectedPosition;
-import pij.model.Move;
-import pij.model.Tile;
+import pij.game.GameConfig;
+import pij.model.*;
 
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -105,29 +105,53 @@ public class MoveValidaterTest {
 
   @Test
   void testIsPlacementValid_valid_vertical() {
-    Move move = new Move("A", DirectedPosition.stringToDirectedPosition("o14"));
-    Board board = BoardLoader.loadBoard();
-    assertTrue(MoveValidator.isPlacementValid(move, board));
+    Path defaultBoardFilePath
+        = Paths.get(GameConfig.RESOURCE_FOLDER_NAME, GameConfig.DEFAULT_BOARD_FILE_NAME);
+    Board board = BoardLoader.loadBoard(defaultBoardFilePath);
+    Path dictionaryPath = Paths.get(GameConfig.RESOURCE_FOLDER_NAME, GameConfig.WORD_LIST_FILE_NAME);
+    Dictionary dictionary = DictionaryLoader.loadDictionary(dictionaryPath);
+
+    Move move = Move.place("AN", DirectedPosition.stringToDirectedPosition("d7"));
+    move.setIsFirstMove(true);
+    assertTrue(MoveValidator.isPlacementValid(move, board, dictionary));
   }
 
   @Test
   void testIsPlacementValid_valid_horizontal() {
-    Move move = new Move("AB", DirectedPosition.stringToDirectedPosition("14o"));
-    Board board = BoardLoader.loadBoard();
-    assertTrue(MoveValidator.isPlacementValid(move, board));
+    Path defaultBoardFilePath
+        = Paths.get(GameConfig.RESOURCE_FOLDER_NAME, GameConfig.DEFAULT_BOARD_FILE_NAME);
+    Board board = BoardLoader.loadBoard(defaultBoardFilePath);
+    Path dictionaryPath = Paths.get(GameConfig.RESOURCE_FOLDER_NAME, GameConfig.WORD_LIST_FILE_NAME);
+    Dictionary dictionary = DictionaryLoader.loadDictionary(dictionaryPath);
+
+    Move move = Move.place("AN", DirectedPosition.stringToDirectedPosition("7d"));
+    move.setIsFirstMove(true);
+    assertTrue(MoveValidator.isPlacementValid(move, board, dictionary));
   }
 
   @Test
   void testIsPlacementValid_invalid_outOfRow() {
-    Move move = new Move("AB", DirectedPosition.stringToDirectedPosition("o14"));
-    Board board = BoardLoader.loadBoard();
-    assertFalse(MoveValidator.isPlacementValid(move, board));
+    Path defaultBoardFilePath
+        = Paths.get(GameConfig.RESOURCE_FOLDER_NAME, GameConfig.DEFAULT_BOARD_FILE_NAME);
+    Board board = BoardLoader.loadBoard(defaultBoardFilePath);
+    Path dictionaryPath = Paths.get(GameConfig.RESOURCE_FOLDER_NAME, GameConfig.WORD_LIST_FILE_NAME);
+    Dictionary dictionary = DictionaryLoader.loadDictionary(dictionaryPath);
+
+    Move move = Move.place("AN", DirectedPosition.stringToDirectedPosition("o14"));
+    move.setIsFirstMove(true);
+    assertFalse(MoveValidator.isPlacementValid(move, board, dictionary));
   }
 
   @Test
   void testIsPlacementValid_invalid_outOfCol() {
-    Move move = new Move("ABC", DirectedPosition.stringToDirectedPosition("14o"));
-    Board board = BoardLoader.loadBoard();
-    assertFalse(MoveValidator.isPlacementValid(move, board));
+    Path defaultBoardFilePath
+        = Paths.get(GameConfig.RESOURCE_FOLDER_NAME, GameConfig.DEFAULT_BOARD_FILE_NAME);
+    Board board = BoardLoader.loadBoard(defaultBoardFilePath);
+    Path dictionaryPath = Paths.get(GameConfig.RESOURCE_FOLDER_NAME, GameConfig.WORD_LIST_FILE_NAME);
+    Dictionary dictionary = DictionaryLoader.loadDictionary(dictionaryPath);
+
+    Move move = Move.place("AND", DirectedPosition.stringToDirectedPosition("14o"));
+    move.setIsFirstMove(true);
+    assertFalse(MoveValidator.isPlacementValid(move, board, dictionary));
   }
 }

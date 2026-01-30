@@ -19,7 +19,7 @@ public class MoveValidator {
         isPlacementValid(move, board, dictionary);
   }
 
-  private static boolean isLettersInRack(List<Tile> rack, String letters) {
+  public static boolean isLettersInRack(List<Tile> rack, String letters) {
     if (letters.isEmpty()) {
       return true;
     }
@@ -47,7 +47,7 @@ public class MoveValidator {
   }
 
 
-  private static boolean isPlacementValid(Move move, Board board, Dictionary dictionary) {
+  public static boolean isPlacementValid(Move move, Board board, Dictionary dictionary) {
     if (!isMoveStartPositionValid(board, move.getMoveStartPosition())) {
       return false;
     }

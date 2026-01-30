@@ -1,8 +1,13 @@
 package pij.util;
 
 import org.junit.jupiter.api.Test;
+import pij.game.GameConfig;
+import pij.game.GameUI;
 import pij.model.Board;
 import pij.model.Tile;
+
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -14,33 +19,22 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 public class BoardLoaderTest {
   @Test
   void testLoadBoard_Default() {
-    Board board = BoardLoader.loadBoard();
+    Path defaultBoardFilePath
+        = Paths.get(GameConfig.RESOURCE_FOLDER_NAME, GameConfig.DEFAULT_BOARD_FILE_NAME);
+    Board board = BoardLoader.loadBoard(defaultBoardFilePath);
     board.printSquareGrid();
     board.printTileGrid();
-    board.showBoard();
+    GameUI.showBoard(board);
     board.putTile(3, 5, new Tile('A', 1));
-    board.showBoard();
-  }
-
-  @Test
-  void testLoadBoard_FileName() {
-    Board board = BoardLoader.loadBoard("defaultBoard.txt");
-  }
-
-  @Test
-  void testLoadBoard_EmptyFileName() {
-    Throwable exception = assertThrows(IllegalArgumentException.class,
-        () -> {
-          Board board = BoardLoader.loadBoard("");
-        });
-    System.out.println(exception.getMessage());
+    GameUI.showBoard(board);
   }
 
   @Test
   void testLoadBoard_NonExistingFile() {
+    Path filePath = Paths.get(GameConfig.RESOURCE_FOLDER_NAME, "nonexisting.txt");
     Throwable exception = assertThrows(IllegalArgumentException.class,
         () -> {
-          Board board = BoardLoader.loadBoard("nonexisting.txt");
+          Board board = BoardLoader.loadBoard(filePath);
         });
     System.out.println(exception.getMessage());
   }
