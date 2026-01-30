@@ -8,7 +8,6 @@ import pij.model.*;
  * @author Yubeen Lee
  */
 public class MoveExecutor {
-  //TODO: handle the very first move
   public static void applyMove(Move move, Board board, Player player, TileBag tileBag) {
     if (move.getMoveType() == MoveType.PASS) {
       return;

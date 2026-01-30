@@ -14,7 +14,6 @@ public class DirectedPosition {
     Position startPosition = null;
     Direction direction = null;
 
-    //if s is not valid, return null
     if (s == null || s.isEmpty()) {
       return null;
     }
@@ -22,13 +21,12 @@ public class DirectedPosition {
       return null;
     }
 
-    //if s has alphabet at the beginning, use string as it is to create position and direction is vertical
     if (s.charAt(0) >= 'a' && s.charAt(0) <= 'z') {
       startPosition = Position.stringToPosition(s);
       direction = Direction.VERTICAL;
     } else if (s.charAt(s.length() - 1) >= 'a' && s.charAt(s.length() - 1) <= 'z') {
-      //if s has alphabet at the end, modify string to create position and direction is horizontal
-      startPosition = Position.stringToPosition(s.substring(s.length() - 1) + s.substring(0, s.length() - 1));
+      startPosition = Position.stringToPosition(s.substring(s.length() - 1)
+          + s.substring(0, s.length() - 1));
       direction = Direction.HORIZONTAL;
     }
 

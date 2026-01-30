@@ -9,7 +9,6 @@ import pij.model.Move;
  * @author Yubeen Lee
  */
 public class MoveParser {
-
   /**
    * Parses a string representation of a move to new {@code Move}.
    * Expected format: word,square

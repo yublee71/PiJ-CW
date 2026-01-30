@@ -16,8 +16,6 @@ import java.util.List;
  * @author Yubeen Lee
  */
 public class BoardLoader {
-  //TODO: clean up exception logic
-
   public static Board loadBoard(Path filePath) {
     List<String> lines;
 

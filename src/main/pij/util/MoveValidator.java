@@ -5,7 +5,6 @@ import pij.model.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-import java.util.Objects;
 
 /**
  *
@@ -14,7 +13,6 @@ import java.util.Objects;
  */
 public class MoveValidator {
   public static boolean isMoveValid(Move move, Player player, Board board, Dictionary dictionary) {
-    // if pass return true
     if (move.getMoveType() == MoveType.PASS)
       return true;
     return isLettersInRack(player.getRack(), move.getLetters()) &&
@@ -22,9 +20,6 @@ public class MoveValidator {
   }
 
   private static boolean isLettersInRack(List<Tile> rack, String letters) {
-    Objects.requireNonNull(rack, "Player rack cannot be null");
-    Objects.requireNonNull(letters, "Letters cannot be null");
-
     if (letters.isEmpty()) {
       return true;
     }
@@ -53,15 +48,6 @@ public class MoveValidator {
 
 
   private static boolean isPlacementValid(Move move, Board board, Dictionary dictionary) {
-    Objects.requireNonNull(move, "Move cannot be null");
-    Objects.requireNonNull(board, "Board cannot be null");
-
-    //Check if the start position is inside the board range
-    //plus, if the firstmove, then check if it includes start position
-    //Check if there is any tile in that placement or right before and after and letters are all included
-    //Check if there is any tile in adjacent places
-
-    //if start position is out of board or already occupied return false
     if (!isMoveStartPositionValid(board, move.getMoveStartPosition())) {
       return false;
     }
