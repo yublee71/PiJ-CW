@@ -22,14 +22,10 @@ public class MoveExecutor {
     BoardIterator.iterateBackwards(move.getMoveStartPosition(),
         move.getMoveDirection(),
         board,
-        (tile) -> {
-          score[0] += (tile.getValue());
-        });
+        (tile) -> score[0] += (tile.getValue()));
 
     BoardIterator.iterateForward(move.getMoveStartPosition(), move.getMoveDirection(), board,
-        (tile) -> {
-          score[0] += (tile.getValue());
-        },
+        (tile) -> score[0] += (tile.getValue()),
         ((position, i) -> {
           Square square = squareGrid[position.row()][position.col()];
           int squareValue = square.getValue();

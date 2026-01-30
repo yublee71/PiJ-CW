@@ -98,9 +98,7 @@ public class MoveValidator {
         move.getMoveStartPosition(),
         move.getMoveDirection(),
         board,
-        (tile) -> {
-          word.append(tile.getLetter());
-        });
+        (tile) -> word.append(tile.getLetter()));
 
     return word.reverse().toString().toLowerCase(Locale.ROOT);
   }
@@ -113,9 +111,7 @@ public class MoveValidator {
         move.getMoveStartPosition(),
         move.getMoveDirection(),
         board,
-        (tile) -> {
-          word.append(tile.getLetter());
-        },
+        (tile) -> word.append(tile.getLetter()),
         (position, i) -> {
           if (!isAdjacentFree(move.getMoveDirection(), position, board)) {
             return false;
